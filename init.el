@@ -277,3 +277,12 @@
 
 ;; (add-to-list 'auto-mode-alist '("\\.jsp$") . web-mode)
 
+
+
+;; -----------------------------------------------------------------------------
+;; LOCAL INITIALIZATION
+;; -----------------------------------------------------------------------------
+
+(if (file-exists-p "~/.emacs.d/local-init.el")
+    (load-file "~/.emacs.d/local-init.el")
+  (message "No local-init.el found"))

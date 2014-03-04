@@ -5,3 +5,4 @@ bookmarks
 elpa/*
 semanticdb/*
 url/*
+local-init.el
