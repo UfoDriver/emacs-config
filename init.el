@@ -71,7 +71,7 @@
 ;; Better buffer list
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (autoload 'ibuffer "ibuffer" "List buffers." t)
-(setq ibuffer-save-filter-groups
+(setq ibuffer-saved-filter-groups
       (quote (("default"
                ("JavaScript" (or
                               (mode . javascript-mode)
@@ -83,9 +83,10 @@
                ("Emacs" (or
                          (name . "^\\*scratch\\*$")
                          (name . "^\\*Messages\\*$")))
-               ("Services" (name "^\\*.*\\*^"))
+               ("Services" (name . "^\\*.*\\*$"))
                ("Rubies" (name . "^.*\\.rb$"))
                ("Pythons" (name . "^.*\\.py$"))
+               ("Emacs Lisp" (name . "^.*\\.el$"))
                ("CSS" (or
                        (mode . css-mode)
                        (mode . less-css-mode)))))))
