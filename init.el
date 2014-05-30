@@ -10,6 +10,7 @@
  '(ecb-options-version "2.40")
  '(fill-column 80)
  '(inhibit-startup-screen t)
+ '(scroll-bar-mode nil)
  '(show-paren-mode t)
  '(tool-bar-mode nil))
 (custom-set-faces
@@ -92,6 +93,9 @@
                        (mode . less-css-mode)))))))
 
 
+;; Selection now like in other editors
+(delete-selection-mode t)
+
 ;; -----------------------------------------------------------------------------
 ;; PACKAGES AND SOURCES
 ;; -----------------------------------------------------------------------------
@@ -107,14 +111,15 @@
 
 
 ;; package-activated-list
-;;  (setq additional-packages
-;;     '(magit moe-theme yasnippet yaml-mode ruby-block ruby-electric ruby-end inf-ruby yari haml-mode haskell-mode ghc))
-
 (setq additional-packages
-      '(multi-web-mode auto-complete feature-mode fill-column-indicator
-      flymake-jshint flymake-json flymake-easy flymake-less less-css-mode magit
-      marmalade furl popup projectile pkg-info epl dash pymacs rfringe s
-      zencoding-mode pyflakes jinja2-mode))
+      '(anaconda-mode auto-complete emmet-mode feature-mode
+                      fill-column-indicator flymake-cursor flymake-jshint
+                      flymake-json flymake-easy flymake-less jinja2-mode
+                      js2-mode less-css-mode magit git-rebase-mode
+                      git-commit-mode marmalade furl multi-web-mode popup
+                      projectile pkg-info epl dash pyflakes pymacs rfringe
+                      rhtml-mode rinari jump inflections findr ruby-compilation
+                      inf-ruby s)
 
 ;; fetch the list of packages available
 (when (not package-archive-contents)
@@ -236,8 +241,12 @@
 
 ;; JS hint mode
 (require 'flymake-jshint)
+(flymake-jshint-load)
 (add-hook 'js-mode-hook
-     (lambda () (flymake-mode t)))
+     (lambda () (progn
+                  (setq js-indent-level 2)
+                  (flymake-mode t))))
+
 
 ;; Right fringe (gutter)
 (require 'rfringe)

@@ -1,1 +1,0 @@
-../git-modules/rhtml/rhtml-ruby-hook.el
