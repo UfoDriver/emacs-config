@@ -119,7 +119,7 @@
                       git-commit-mode marmalade furl multi-web-mode popup
                       projectile pkg-info epl dash pyflakes pymacs rfringe
                       rhtml-mode rinari jump inflections findr ruby-compilation
-                      inf-ruby s)
+                      inf-ruby s))
 
 ;; fetch the list of packages available
 (when (not package-archive-contents)
