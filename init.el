@@ -10,6 +10,7 @@
  '(ecb-options-version "2.40")
  '(fill-column 80)
  '(inhibit-startup-screen t)
+ '(js2-basic-offset 2)
  '(scroll-bar-mode nil)
  '(show-paren-mode t)
  '(tool-bar-mode nil))
@@ -76,7 +77,8 @@
       (quote (("default"
                ("JavaScript" (or
                               (mode . javascript-mode)
-                              (mode . js-mode)))
+                              (mode . js-mode)
+                              (mode . js2-mode)))
                ("Web" (or
                        (mode . web-mode)
                        (mode . html-mode)
@@ -139,11 +141,8 @@
 (global-set-key (kbd "C-d") 'comment-or-uncomment-region)
 (global-set-key (kbd "M-<up>") 'move-text-up)
 (global-set-key (kbd "M-<down>") 'move-text-down)
-;(global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
-;(global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
-;(global-set-key (kbd "S-C-<down>") 'shrink-window)
-;(global-set-key (kbd "S-C-<up>") 'enlarge-window)
-
+(global-set-key (kbd "M-<left>")  'windmove-left)
+(global-set-key (kbd "M-<right>") 'windmove-right)
 
 ;; -----------------------------------------------------------------------------
 ;; CUSTOM FUNCTIONS
@@ -240,12 +239,13 @@
 ;(add-hook 'after-change-major-mode-hook 'fci-mode)
 
 ;; JS hint mode
-(require 'flymake-jshint)
-(flymake-jshint-load)
-(add-hook 'js-mode-hook
-     (lambda () (progn
-                  (setq js-indent-level 2)
-                  (flymake-mode t))))
+;; (require 'flymake-jshint)
+;; (flymake-jshint-load)
+;; (add-hook 'js-mode-hook
+;;      (lambda () (progn
+;;                   (setq js-indent-level 2)
+;;                   (flymake-mode t))))
+(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 
 
 ;; Right fringe (gutter)
@@ -326,6 +326,11 @@
 
 ;; (add-to-list 'auto-mode-alist '("\\.jsp$") . web-mode)
 
+
+;; Org mode todo states
+(setq org-todo-keywords '("TODO" "BLOCKED" "DONE"))
+(setq org-todo-keyword-faces
+      '(("BLOCKED" . org-warning)))
 
 
 ;; -----------------------------------------------------------------------------

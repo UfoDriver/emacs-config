@@ -6,3 +6,6 @@ elpa/*
 semanticdb/*
 url/*
 local-init.el
+*~
+ede-projects.el
+.achievements
