@@ -136,7 +136,7 @@
 
 ;; package-activated-list
 (setq additional-packages
-      '(anaconda-mode auto-complete emmet-mode feature-mode
+      '(anaconda-mode auto-complete emmet-mode feature-mode karma
                       fill-column-indicator flymake-cursor flymake-jshint
                       flymake-json flymake-easy flymake-less jinja2-mode
                       js2-mode less-css-mode magit marmalade furl multi-web-mode
