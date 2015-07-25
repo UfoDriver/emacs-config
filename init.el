@@ -11,6 +11,15 @@
  '(fill-column 80)
  '(inhibit-startup-screen t)
  '(js2-basic-offset 2)
+ '(menu-bar-mode nil)
+ '(safe-local-variable-values
+   (quote
+    ((eval progn
+           (helm-mode 1)
+           (projectile-global-mode))
+     (css-indent-offset . 2)
+     (whitespace-line-column . 100)
+     (indent-tabs-mode t))))
  '(scroll-bar-mode nil)
  '(show-paren-mode t)
  '(tool-bar-mode nil))
@@ -19,11 +28,14 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "DejaVu Sans Mono" :foundry "unknown" :slant normal :weight normal :height 78 :width normal))))
+ '(default ((t (:inherit nil :stipple nil :background "#2e3436" :foreground "#eeeeec" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 70 :width normal :foundry "unknown" :family "DejaVu Sans Mono"))))
  '(magit-diff-add ((t (:inherit nil :foreground "green"))))
  '(magit-diff-del ((t (:inherit diff-removed :foreground "red"))))
  '(magit-item-highlight ((t (:inherit highlight-))))
- '(whitespace-empty ((t (:background "DarkGoldenrod4" :foreground "firebrick")))))
+ '(whitespace-empty ((t (:background "DarkGoldenrod4" :foreground "firebrick"))))
+ '(whitespace-indentation ((t (:background "gray15" :foreground "firebrick"))))
+ '(whitespace-space-after-tab ((t (:background "gray15" :foreground "firebrick"))))
+ '(whitespace-space-before-tab ((t (:background "gray15" :foreground "firebrick")))))
 
 (add-to-list 'load-path "~/.emacs.d/site-lisp/")
 
@@ -52,6 +64,11 @@
 ;; Line delimiter
 (setq default-buffer-file-coding-system 'utf-8-unix)
 
+;; Scrolling tweaks
+(setq scroll-step 1)
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
+(setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
+(setq mouse-wheel-follow-mouse 't)
 
 ;; Unique buffer names
 (require 'uniquify)
@@ -64,7 +81,8 @@
 (add-hook 'html-mode-hook
           (lambda ()
             ;; Default indentation is usually 2 spaces, changing to 4.
-            (set (make-local-variable 'sgml-basic-offset) 2)))
+            (set (make-local-variable 'sgml-basic-offset) 2)
+            (emmet-mode)))
 
 ;; Smarter minibuffer autocompletion
 (require 'ido)
@@ -90,6 +108,7 @@
                ("Rubies" (name . "^.*\\.rb$"))
                ("Pythons" (name . "^.*\\.py$"))
                ("Emacs Lisp" (name . "^.*\\.el$"))
+               ("Dired" (mode . dired-mode))
                ("CSS" (or
                        (mode . css-mode)
                        (mode . less-css-mode)))))))
@@ -97,6 +116,9 @@
 
 ;; Selection now like in other editors
 (delete-selection-mode t)
+
+;; Electric pairs are useful when gets used
+(electric-pair-mode)
 
 ;; -----------------------------------------------------------------------------
 ;; PACKAGES AND SOURCES
@@ -117,9 +139,8 @@
       '(anaconda-mode auto-complete emmet-mode feature-mode
                       fill-column-indicator flymake-cursor flymake-jshint
                       flymake-json flymake-easy flymake-less jinja2-mode
-                      js2-mode less-css-mode magit git-rebase-mode
-                      git-commit-mode marmalade furl multi-web-mode popup
-                      projectile pkg-info epl dash pyflakes pymacs rfringe
+                      js2-mode less-css-mode magit marmalade furl multi-web-mode
+                      popup projectile pkg-info epl dash pyflakes pymacs rfringe
                       rhtml-mode rinari jump inflections findr ruby-compilation
                       inf-ruby s))
 
@@ -144,6 +165,10 @@
 (global-set-key (kbd "M-<left>")  'windmove-left)
 (global-set-key (kbd "M-<right>") 'windmove-right)
 
+;; Enter for newline-and-indent in programming modes
+(add-hook 'prog-mode-hook '(lambda ()
+  (local-set-key (kbd "RET") 'newline-and-indent)))
+
 ;; -----------------------------------------------------------------------------
 ;; CUSTOM FUNCTIONS
 ;; -----------------------------------------------------------------------------
@@ -164,11 +189,19 @@
    (t
     (let ((column (current-column)))
       (beginning-of-line)
-      (when (or (> arg 0) (not (bobp)))
+      ;; (when (or (> arg 0) (not (bobp)))
+      ;;   (forward-line)
+      ;;   (when (or (< arg 0) (not (eobp)))
+      ;;     (transpose-lines arg))
+      ;;   (forward-line -1))
+      (when (and (> arg 0) (not (eobp))) ;; move down
         (forward-line)
-        (when (or (< arg 0) (not (eobp)))
-          (transpose-lines arg))
+        (transpose-lines arg)
         (forward-line -1))
+
+      (when (and (< arg 0) (not (bobp))) ;; move up
+        (transpose-lines (- arg))
+        (forward-line -2))
       (move-to-column column t)))))
 
 (defun move-text-down (arg)
@@ -263,7 +296,7 @@
 
 ;; Magit - git integration
 (require 'magit)
-
+(setq magit-last-seen-setup-instructions "1.4.0")
 
 ;; -----------------------------------------------------------------------------
 ;; TO SORT OUT
@@ -333,6 +366,27 @@
       '(("BLOCKED" . org-warning)))
 
 
+;; Tern - javascript refactoring library settings
+(add-hook 'js2-mode-hook (lambda () (tern-mode t)))
+(eval-after-load 'tern
+  '(progn
+     (require 'tern-auto-complete)
+     (tern-ac-setup)))
+
+;; Karma runner loading
+(require 'karma)
+
+
+;; Helm framework
+(require 'helm-config)
+
+;; Projectile and helm integration
+(setq projectile-completion-system 'helm)
+(helm-projectile-on)
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "C-x C-b") 'helm-mini)
+
+
 ;; -----------------------------------------------------------------------------
 ;; LOCAL INITIALIZATION
 ;; -----------------------------------------------------------------------------
@@ -340,3 +394,5 @@
 (if (file-exists-p "~/.emacs.d/local-init.el")
     (load-file "~/.emacs.d/local-init.el")
   (message "No local-init.el found"))
+(put 'narrow-to-region 'disabled nil)
+(put 'dired-find-alternate-file 'disabled nil)
