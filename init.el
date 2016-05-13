@@ -11,6 +11,7 @@
  '(fill-column 80)
  '(inhibit-startup-screen t)
  '(js2-basic-offset 2)
+ '(magit-push-always-verify nil)
  '(menu-bar-mode nil)
  '(safe-local-variable-values
    (quote
@@ -136,7 +137,7 @@
 
 ;; package-activated-list
 (setq additional-packages
-      '(anaconda-mode auto-complete emmet-mode feature-mode karma
+      '(auto-complete emmet-mode feature-mode karma
                       fill-column-indicator flymake-cursor flymake-jshint
                       flymake-json flymake-easy flymake-less jinja2-mode
                       js2-mode less-css-mode magit marmalade furl multi-web-mode
@@ -234,13 +235,7 @@
 ;; -----------------------------------------------------------------------------
 ;; MODULES AND EXTENSIONS
 ;; -----------------------------------------------------------------------------
-
-;; Autocomplete Support
-(require 'auto-complete)
-;; (add-to-list 'ac-dictionary-directories "~/.emacs.d/dict")
-(require 'auto-complete-config)
-(ac-config-default)
-
+(global-company-mode)
 
 ;;(load-file "/home/alex/.emacs.d/emacs-for-python/epy-init.el")
 ; (require 'epy-setup)      ;; It will setup other loads, it is required!
@@ -279,7 +274,10 @@
 ;;                   (setq js-indent-level 2)
 ;;                   (flymake-mode t))))
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
-
+(add-to-list 'auto-mode-alist '("\\.jsx$" . js2-jsx-mode))
+(add-hook 'js2-jsx-mode-hook
+          (lambda ()
+            (setq-local sgml-basic-offset js2-basic-offset)))
 
 ;; Right fringe (gutter)
 (require 'rfringe)
@@ -396,3 +394,10 @@
   (message "No local-init.el found"))
 (put 'narrow-to-region 'disabled nil)
 (put 'dired-find-alternate-file 'disabled nil)
+
+
+(add-hook 'python-mode-hook 'jedi:setup)
+(put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
+
+(add-to-list 'company-backends 'company-tern)

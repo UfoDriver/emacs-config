@@ -9,3 +9,8 @@ local-init.el
 *~
 ede-projects.el
 .achievements
+\#*\#
+.*
+eshell/
+recentf
+projectile-bookmarks.eld
