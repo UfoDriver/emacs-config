@@ -401,3 +401,17 @@
 (put 'downcase-region 'disabled nil)
 
 (add-to-list 'company-backends 'company-tern)
+
+
+;; Dirty hack to set jedi:environment-root to active virtualenv (if any)
+(let ((python-path (executable-find "python"))
+      env-path)
+  (unless (or (string-prefix-p "/usr" python-path)
+              (string-prefix-p "/bin" python-path))
+    ;; Next line is ugly as hell
+    (setq env-path
+          (file-name-directory
+           (directory-file-name
+            (file-name-directory python-path))))
+    (message (concat "Python virtual environment detected: " env-path))
+    (setq jedi:environment-root env-path)))
