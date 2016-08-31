@@ -3,6 +3,7 @@ abbrev_defs
 ac-comphist.dat
 bookmarks
 elpa/*
+ido.last
 semanticdb/*
 url/*
 local-init.el

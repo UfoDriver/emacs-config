@@ -53,6 +53,8 @@
         (space-mark 160)
         (newline-mark 10 [10])
         (tab-mark 9)))
+(setq whitespace-style
+      '(face tabs spaces trailing lines-tail space-before-tab newline indentation empty space-after-tab space-mark tab-mark newline-mark))
 (global-whitespace-mode)
 
 ;; Indenting with spaces and tab is equal to 4 spaces
