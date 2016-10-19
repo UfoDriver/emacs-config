@@ -6,18 +6,26 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
+ '(css-indent-offset 2)
  '(custom-enabled-themes (quote (tango-dark)))
  '(ecb-options-version "2.40")
  '(fill-column 80)
  '(inhibit-startup-screen t)
+ '(js-switch-indent-offset 2)
  '(js2-basic-offset 2)
  '(magit-push-always-verify nil)
+ '(markdown-command "markdown2-3 -x tables -x smarty-pants")
+ '(markdown-command-needs-filename t)
  '(menu-bar-mode nil)
+ '(package-selected-packages
+   (quote
+    (feature-mode helm-emmet helm-package yaml-mode xmlgen tern-auto-complete scss-mode rinari rhtml-mode rfringe request-deferred pythonic python-pep8 pymacs pyflakes pycomplete pos-tip multi-web-mode marmalade markdown-mode+ magit karma jsx-mode json-rpc jinja2-mode jedi jade-mode helm-projectile helm-css-scss helm-ag fuzzy flymake-python-pyflakes flymake-less flymake-json flymake-jshint flymake-cursor fill-column-indicator fabric emmet-mode django-mode discover-js2-refactor company-tern company-jedi calfw-gcal calfw ac-js2)))
  '(safe-local-variable-values
    (quote
-    ((eval progn
-           (helm-mode 1)
-           (projectile-global-mode))
+    ((js2-basic-offset . 2)
+     (whitespace-line-column . 120)
+     (eval progn
+           (helm-mode 1))
      (css-indent-offset . 2)
      (whitespace-line-column . 100)
      (indent-tabs-mode t))))
@@ -144,8 +152,7 @@
                       flymake-json flymake-easy flymake-less jinja2-mode
                       js2-mode less-css-mode magit marmalade furl multi-web-mode
                       popup projectile pkg-info epl dash pyflakes pymacs rfringe
-                      rhtml-mode rinari jump inflections findr ruby-compilation
-                      inf-ruby s))
+                      findr ruby-compilation s))
 
 ;; fetch the list of packages available
 (when (not package-archive-contents)
@@ -381,11 +388,13 @@
 (require 'helm-config)
 
 ;; Projectile and helm integration
+(projectile-mode)
 (setq projectile-completion-system 'helm)
 (helm-projectile-on)
 (global-set-key (kbd "M-x") 'helm-M-x)
 (global-set-key (kbd "C-x C-b") 'helm-mini)
-
+(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
 
 ;; -----------------------------------------------------------------------------
 ;; LOCAL INITIALIZATION
