@@ -19,7 +19,7 @@
  '(menu-bar-mode nil)
  '(package-selected-packages
    (quote
-    (feature-mode helm-emmet helm-package yaml-mode xmlgen tern-auto-complete scss-mode rinari rhtml-mode rfringe request-deferred pythonic python-pep8 pymacs pyflakes pycomplete pos-tip multi-web-mode marmalade markdown-mode+ magit karma jsx-mode json-rpc jinja2-mode jedi jade-mode helm-projectile helm-css-scss helm-ag fuzzy flymake-python-pyflakes flymake-less flymake-json flymake-jshint flymake-cursor fill-column-indicator fabric emmet-mode django-mode discover-js2-refactor company-tern company-jedi calfw-gcal calfw ac-js2)))
+    (feature-mode helm-emmet helm-package yaml-mode xmlgen tern-auto-complete scss-mode rfringe request-deferred pythonic python-pep8 pymacs pyflakes pycomplete pos-tip multi-web-mode marmalade markdown-mode+ magit karma jsx-mode json-rpc jinja2-mode jedi jade-mode helm-projectile helm-css-scss helm-ag fuzzy flymake-python-pyflakes flymake-less flymake-json flymake-jshint flymake-cursor fill-column-indicator fabric emmet-mode django-mode discover-js2-refactor company-tern company-jedi calfw-gcal calfw ac-js2)))
  '(safe-local-variable-values
    (quote
     ((js2-basic-offset . 2)
@@ -147,12 +147,11 @@
 
 ;; package-activated-list
 (setq additional-packages
-      '(auto-complete emmet-mode feature-mode karma
+      '(auto-complete emmet-mode feature-mode karma rfringe
                       fill-column-indicator flymake-cursor flymake-jshint
                       flymake-json flymake-easy flymake-less jinja2-mode
                       js2-mode less-css-mode magit marmalade furl multi-web-mode
-                      popup projectile pkg-info epl dash pyflakes pymacs rfringe
-                      findr ruby-compilation s))
+                      popup projectile pkg-info epl dash pyflakes pymacs s))
 
 ;; fetch the list of packages available
 (when (not package-archive-contents)
@@ -292,11 +291,6 @@
 (require 'rfringe)
 ;; (remove-hook 'after-change-major-mode-hook 'rfringe-mode)
 
-;; RHTML mode
-(require 'rhtml-mode)
-(add-hook 'rhtml-mode-hook
-          (lambda () (rinari-launch)))
-
 ;; Feature mode (cucumber, lettuce)
 (require 'feature-mode)
 (add-to-list 'auto-mode-alist '("\.feature$" . feature-mode))
@@ -337,10 +331,6 @@
 ;;(add-to-list 'load-path
 ;;             "~/tmp/emacs/ecb/")
 ;;(require 'ecb)
-
-; Rinari (ROR support)
-;;(add-to-list 'load-path "~/tmp/emacs/rinari")
-;;(require 'rinari)
 
 
 ; MozRepl
