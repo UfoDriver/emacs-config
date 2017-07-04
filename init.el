@@ -14,12 +14,12 @@
  '(js-switch-indent-offset 2)
  '(js2-basic-offset 2)
  '(magit-push-always-verify nil)
- '(markdown-command "markdown2-3 -x tables -x smarty-pants")
+ '(markdown-command "markdown2-3 -x tables -x smarty-pants -x strike")
  '(markdown-command-needs-filename t)
  '(menu-bar-mode nil)
  '(package-selected-packages
    (quote
-    (feature-mode helm-emmet helm-package yaml-mode xmlgen tern-auto-complete scss-mode rfringe request-deferred pythonic python-pep8 pymacs pyflakes pycomplete pos-tip multi-web-mode marmalade markdown-mode+ magit karma jsx-mode json-rpc jinja2-mode jedi jade-mode helm-projectile helm-css-scss helm-ag fuzzy flymake-python-pyflakes flymake-less flymake-json flymake-jshint flymake-cursor fill-column-indicator fabric emmet-mode django-mode discover-js2-refactor company-tern company-jedi calfw-gcal calfw ac-js2)))
+    (drag-stuff helm-gtags rpm-spec-mode company-qml qml-mode graphviz-dot-mode stickyfunc-enhance dockerfile-mode cython-mode feature-mode helm-emmet helm-package yaml-mode xmlgen scss-mode rfringe request-deferred pythonic python-pep8 pymacs pyflakes pycomplete pos-tip multi-web-mode marmalade markdown-mode+ magit karma jsx-mode json-rpc jinja2-mode jade-mode helm-projectile helm-css-scss helm-ag fuzzy flymake-python-pyflakes flymake-less flymake-json flymake-jshint flymake-cursor fill-column-indicator fabric emmet-mode discover-js2-refactor company-tern company-jedi)))
  '(safe-local-variable-values
    (quote
     ((js2-basic-offset . 2)
@@ -31,7 +31,8 @@
      (indent-tabs-mode t))))
  '(scroll-bar-mode nil)
  '(show-paren-mode t)
- '(tool-bar-mode nil))
+ '(tool-bar-mode nil)
+ '(whitespace-line-column 100))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -99,6 +100,13 @@
 (require 'ido)
 (ido-mode t)
 
+;; Asm mode tabs and tab width
+(add-hook 'asm-mode-hook
+          (lambda ()
+            ;; Default indentation is usually 2 spaces, changing to 4.
+            (set (make-local-variable 'indent-tabs-mode) t)
+            (set (make-local-variable 'tab-width) 8)))
+
 ;; Better buffer list
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (autoload 'ibuffer "ibuffer" "List buffers." t)
@@ -147,11 +155,10 @@
 
 ;; package-activated-list
 (setq additional-packages
-      '(auto-complete emmet-mode feature-mode karma rfringe
-                      fill-column-indicator flymake-cursor flymake-jshint
-                      flymake-json flymake-easy flymake-less jinja2-mode
-                      js2-mode less-css-mode magit marmalade furl multi-web-mode
-                      popup projectile pkg-info epl dash pyflakes pymacs s))
+      '(emmet-mode feature-mode karma rfringe fill-column-indicator flymake-cursor flymake-jshint
+                   flymake-json flymake-easy flymake-less jinja2-mode js2-mode less-css-mode magit
+                   marmalade furl multi-web-mode popup projectile pkg-info epl dash pyflakes pymacs
+                   s))
 
 ;; fetch the list of packages available
 (when (not package-archive-contents)
@@ -167,12 +174,8 @@
 ;; CUSTOM KEYBINDINGS
 ;; -----------------------------------------------------------------------------
 
-;; C-d for commenting and uncommenting
-(global-set-key (kbd "C-d") 'comment-or-uncomment-region)
-(global-set-key (kbd "M-<up>") 'move-text-up)
-(global-set-key (kbd "M-<down>") 'move-text-down)
-(global-set-key (kbd "M-<left>")  'windmove-left)
-(global-set-key (kbd "M-<right>") 'windmove-right)
+;; (global-set-key (kbd "M-<left>")  'windmove-left)
+;; (global-set-key (kbd "M-<right>") 'windmove-right)
 
 ;; Enter for newline-and-indent in programming modes
 (add-hook 'prog-mode-hook '(lambda ()
@@ -181,50 +184,6 @@
 ;; -----------------------------------------------------------------------------
 ;; CUSTOM FUNCTIONS
 ;; -----------------------------------------------------------------------------
-
-(defun move-text-internal (arg)
-  (cond
-   ((and mark-active transient-mark-mode)
-    (if (> (point) (mark))
-        (exchange-point-and-mark))
-    (let ((column (current-column))
-          (text (delete-and-extract-region (point) (mark))))
-      (forward-line arg)
-      (move-to-column column t)
-      (set-mark (point))
-      (insert text)
-      (exchange-point-and-mark)
-      (setq deactivate-mark nil)))
-   (t
-    (let ((column (current-column)))
-      (beginning-of-line)
-      ;; (when (or (> arg 0) (not (bobp)))
-      ;;   (forward-line)
-      ;;   (when (or (< arg 0) (not (eobp)))
-      ;;     (transpose-lines arg))
-      ;;   (forward-line -1))
-      (when (and (> arg 0) (not (eobp))) ;; move down
-        (forward-line)
-        (transpose-lines arg)
-        (forward-line -1))
-
-      (when (and (< arg 0) (not (bobp))) ;; move up
-        (transpose-lines (- arg))
-        (forward-line -2))
-      (move-to-column column t)))))
-
-(defun move-text-down (arg)
-  "Move region (transient-mark-mode active) or current line
-  arg lines down."
-  (interactive "*p")
-  (move-text-internal arg))
-
-(defun move-text-up (arg)
-  "Move region (transient-mark-mode active) or current line
-  arg lines up."
-  (interactive "*p")
-  (move-text-internal (- arg)))
-
 
 ;; Set window width
 (defun set-window-width (x)
@@ -299,6 +258,10 @@
 (require 'magit)
 (setq magit-last-seen-setup-instructions "1.4.0")
 
+;; Drag stuff - useful line/block moving functions
+(drag-stuff-global-mode 1)
+(drag-stuff-define-keys)
+
 ;; -----------------------------------------------------------------------------
 ;; TO SORT OUT
 ;; -----------------------------------------------------------------------------
@@ -365,10 +328,6 @@
 
 ;; Tern - javascript refactoring library settings
 (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
-(eval-after-load 'tern
-  '(progn
-     (require 'tern-auto-complete)
-     (tern-ac-setup)))
 
 ;; Karma runner loading
 (require 'karma)
@@ -386,6 +345,32 @@
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 (global-set-key (kbd "C-x C-f") 'helm-find-files)
 
+
+;; Helm gtags setup
+(setq
+ helm-gtags-ignore-case t
+ helm-gtags-auto-update t
+ helm-gtags-use-input-at-cursor t
+ helm-gtags-pulse-at-cursor t
+ helm-gtags-prefix-key "\C-cg"
+ helm-gtags-suggested-key-mapping t)
+
+(require 'helm-gtags)
+;; Enable helm-gtags-mode
+;; (add-hook 'dired-mode-hook 'helm-gtags-mode)
+;; (add-hook 'eshell-mode-hook 'helm-gtags-mode)
+(add-hook 'c-mode-hook 'helm-gtags-mode)
+(add-hook 'c++-mode-hook 'helm-gtags-mode)
+;; (add-hook 'asm-mode-hook 'helm-gtags-mode)
+
+;; (define-key helm-gtags-mode-map (kbd "C-c g a") 'helm-gtags-tags-in-this-function)
+;; (define-key helm-gtags-mode-map (kbd "C-j") 'helm-gtags-select)
+(define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
+(define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
+;; (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
+;; (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
+
+
 ;; -----------------------------------------------------------------------------
 ;; LOCAL INITIALIZATION
 ;; -----------------------------------------------------------------------------
@@ -398,6 +383,8 @@
 
 
 (add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:complete-on-dot t)
+
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
 
@@ -416,3 +403,11 @@
             (file-name-directory python-path))))
     (message (concat "Python virtual environment detected: " env-path))
     (setq jedi:environment-root env-path)))
+
+;; Setting frame name if projectile project found
+(set-frame-name
+ (condition-case nil
+     (capitalize
+      (car (last (split-string (car (projectile-get-project-directories)) "/" t))))
+   (error (progn (message "Projectile project not found")
+                 default-directory))))
