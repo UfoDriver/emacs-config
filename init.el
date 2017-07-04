@@ -21,14 +21,14 @@
    (quote
     (drag-stuff helm-gtags rpm-spec-mode company-qml qml-mode graphviz-dot-mode stickyfunc-enhance dockerfile-mode cython-mode feature-mode helm-emmet helm-package yaml-mode xmlgen scss-mode rfringe request-deferred pythonic python-pep8 pymacs pyflakes pycomplete pos-tip multi-web-mode marmalade markdown-mode+ magit karma jsx-mode json-rpc jinja2-mode jade-mode helm-projectile helm-css-scss helm-ag fuzzy flymake-python-pyflakes flymake-less flymake-json flymake-jshint flymake-cursor fill-column-indicator fabric emmet-mode discover-js2-refactor company-tern company-jedi)))
  '(safe-local-variable-values
-   (quote
     ((js2-basic-offset . 2)
      (whitespace-line-column . 120)
      (eval progn
-           (helm-mode 1))
+           (helm-mode 1)
+           (projectile-mode))
      (css-indent-offset . 2)
      (whitespace-line-column . 100)
-     (indent-tabs-mode t))))
+     (indent-tabs-mode t)))
  '(scroll-bar-mode nil)
  '(show-paren-mode t)
  '(tool-bar-mode nil)
@@ -108,7 +108,7 @@
             (set (make-local-variable 'tab-width) 8)))
 
 ;; Better buffer list
-(global-set-key (kbd "C-x C-b") 'ibuffer)
+;; (global-set-key (kbd "C-x C-b") 'ibuffer)
 (autoload 'ibuffer "ibuffer" "List buffers." t)
 (setq ibuffer-saved-filter-groups
       (quote (("default"
@@ -173,9 +173,6 @@
 ;; -----------------------------------------------------------------------------
 ;; CUSTOM KEYBINDINGS
 ;; -----------------------------------------------------------------------------
-
-;; (global-set-key (kbd "M-<left>")  'windmove-left)
-;; (global-set-key (kbd "M-<right>") 'windmove-right)
 
 ;; Enter for newline-and-indent in programming modes
 (add-hook 'prog-mode-hook '(lambda ()
@@ -258,8 +255,7 @@
 (require 'magit)
 (setq magit-last-seen-setup-instructions "1.4.0")
 
-;; Drag stuff - useful line/block moving functions
-(drag-stuff-global-mode 1)
+(drag-stuff-global-mode t)
 (drag-stuff-define-keys)
 
 ;; -----------------------------------------------------------------------------
@@ -332,7 +328,6 @@
 ;; Karma runner loading
 (require 'karma)
 
-
 ;; Helm framework
 (require 'helm-config)
 
@@ -340,6 +335,7 @@
 (projectile-mode)
 (setq projectile-completion-system 'helm)
 (helm-projectile-on)
+(projectile-mode)
 (global-set-key (kbd "M-x") 'helm-M-x)
 (global-set-key (kbd "C-x C-b") 'helm-mini)
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
@@ -382,14 +378,16 @@
 (put 'dired-find-alternate-file 'disabled nil)
 
 
+(defun my/python-mode-hook ()
+  (add-to-list 'company-backends 'company-jedi))
 (add-hook 'python-mode-hook 'jedi:setup)
+(add-hook 'python-mode-hook 'my/python-mode-hook)
 (setq jedi:complete-on-dot t)
 
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
 
 (add-to-list 'company-backends 'company-tern)
-
 
 ;; Dirty hack to set jedi:environment-root to active virtualenv (if any)
 (let ((python-path (executable-find "python"))
