@@ -19,16 +19,16 @@
  '(menu-bar-mode nil)
  '(package-selected-packages
    (quote
-    (drag-stuff helm-gtags rpm-spec-mode company-qml qml-mode graphviz-dot-mode stickyfunc-enhance dockerfile-mode cython-mode feature-mode helm-emmet helm-package yaml-mode xmlgen scss-mode rfringe request-deferred pythonic python-pep8 pymacs pyflakes pycomplete pos-tip multi-web-mode marmalade markdown-mode+ magit karma jsx-mode json-rpc jinja2-mode jade-mode helm-projectile helm-css-scss helm-ag fuzzy flymake-python-pyflakes flymake-less flymake-json flymake-jshint flymake-cursor fill-column-indicator fabric emmet-mode discover-js2-refactor company-tern company-jedi)))
+    (elisp-slime-nav slime-company notify slime drag-stuff helm-gtags rpm-spec-mode company-qml qml-mode graphviz-dot-mode stickyfunc-enhance dockerfile-mode cython-mode feature-mode helm-emmet helm-package yaml-mode xmlgen scss-mode rfringe request-deferred pythonic python-pep8 pymacs pyflakes pycomplete pos-tip multi-web-mode marmalade markdown-mode+ magit karma jsx-mode json-rpc jinja2-mode jade-mode helm-projectile helm-css-scss helm-ag fuzzy flymake-python-pyflakes flymake-less flymake-json flymake-jshint flymake-cursor fill-column-indicator fabric emmet-mode discover-js2-refactor company-tern company-jedi)))
  '(safe-local-variable-values
-    ((js2-basic-offset . 2)
-     (whitespace-line-column . 120)
-     (eval progn
-           (helm-mode 1)
-           (projectile-mode))
-     (css-indent-offset . 2)
-     (whitespace-line-column . 100)
-     (indent-tabs-mode t)))
+   ((js2-basic-offset . 2)
+    (whitespace-line-column . 120)
+    (eval progn
+          (helm-mode 1)
+          (projectile-mode))
+    (css-indent-offset . 2)
+    (whitespace-line-column . 100)
+    (indent-tabs-mode t)))
  '(scroll-bar-mode nil)
  '(show-paren-mode t)
  '(tool-bar-mode nil)
@@ -152,24 +152,6 @@
 
 (package-initialize)
 
-
-;; package-activated-list
-(setq additional-packages
-      '(emmet-mode feature-mode karma rfringe fill-column-indicator flymake-cursor flymake-jshint
-                   flymake-json flymake-easy flymake-less jinja2-mode js2-mode less-css-mode magit
-                   marmalade furl multi-web-mode popup projectile pkg-info epl dash pyflakes pymacs
-                   s))
-
-;; fetch the list of packages available
-(when (not package-archive-contents)
-  (package-refresh-contents))
-
-;; install the missing packages
-(dolist (package additional-packages)
-  (when (not (package-installed-p package))
-    (package-install package)))
-
-
 ;; -----------------------------------------------------------------------------
 ;; CUSTOM KEYBINDINGS
 ;; -----------------------------------------------------------------------------
@@ -178,23 +160,32 @@
 (add-hook 'prog-mode-hook '(lambda ()
   (local-set-key (kbd "RET") 'newline-and-indent)))
 
+
 ;; -----------------------------------------------------------------------------
 ;; CUSTOM FUNCTIONS
 ;; -----------------------------------------------------------------------------
 
 ;; Set window width
-(defun set-window-width (x)
+(defun my:set-window-width (x)
   "Set current window width"
   (adjust-window-trailing-edge (selected-window)
                                (- x (window-width))
                                t))
 
 ;; Set window width to 80 columns
-(defun set-80-columns ()
+(defun my:set-80-columns ()
   "Set current window to 80 columns width"
   (interactive)
-  (set-window-width 81))
+  (my:set-window-width 81))
 
+
+;; Setting frame name if projectile project found
+(defun my:setup-frame-name ()
+  (set-frame-name
+   (condition-case nil
+       (capitalize (projectile-project-name))
+     (error (progn (message "Projectile project not found")
+                   default-directory)))))
 
 ;; -----------------------------------------------------------------------------
 ;; MODULES AND EXTENSIONS
@@ -210,11 +201,6 @@
 ;;(epy-setup-checker "pyflakes %f")
 ;;(epy-django-snippets)
 ;;(epy-setup-ipython)
-
-
-;; Zencoding
-;; (require 'zencoding-mode)
-;; (add-hook 'sgml-mode-hook 'zencoding-mode)
 
 ;; ;; Jinja2 support
 ;; (require 'jinja2-mode)
@@ -265,15 +251,6 @@
 ;; SASS mode
 ;;(autoload 'scss-mode "scss-mode")
 ;;(add-to-list 'auto-mode-alist '("\\.scss\\'" . scss-mode))
-
-; Packages
-;(package-initialize)
-;(add-to-list 'package-archives
-;             '("marmalade" . "http://marmalade-repo.org/packages/"))
-
-
-; nXhtml - web related stuff
-;(load-file "/home/alex/.emacs.d/nxhtml/autostart.el")
 
 
 ; Django mode
@@ -331,6 +308,9 @@
 ;; Helm framework
 (require 'helm-config)
 
+;; Slime setup
+(slime-setup '(slime-company))
+
 ;; Projectile and helm integration
 (projectile-mode)
 (setq projectile-completion-system 'helm)
@@ -340,7 +320,6 @@
 (global-set-key (kbd "C-x C-b") 'helm-mini)
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 (global-set-key (kbd "C-x C-f") 'helm-find-files)
-
 
 ;; Helm gtags setup
 (setq
@@ -402,10 +381,6 @@
     (message (concat "Python virtual environment detected: " env-path))
     (setq jedi:environment-root env-path)))
 
-;; Setting frame name if projectile project found
-(set-frame-name
- (condition-case nil
-     (capitalize
-      (car (last (split-string (car (projectile-get-project-directories)) "/" t))))
-   (error (progn (message "Projectile project not found")
-                 default-directory))))
+(my:setup-frame-name)
+
+(setq inferior-lisp-program "/usr/bin/sbcl")
