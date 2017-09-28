@@ -19,7 +19,7 @@
  '(menu-bar-mode nil)
  '(package-selected-packages
    (quote
-    (elisp-slime-nav slime-company notify slime drag-stuff helm-gtags rpm-spec-mode company-qml qml-mode graphviz-dot-mode stickyfunc-enhance dockerfile-mode cython-mode feature-mode helm-emmet helm-package yaml-mode xmlgen scss-mode rfringe request-deferred pythonic python-pep8 pymacs pyflakes pycomplete pos-tip multi-web-mode marmalade markdown-mode+ magit karma jsx-mode json-rpc jinja2-mode jade-mode helm-projectile helm-css-scss helm-ag fuzzy flymake-python-pyflakes flymake-less flymake-json flymake-jshint flymake-cursor fill-column-indicator fabric emmet-mode discover-js2-refactor company-tern company-jedi)))
+    (company-ansible flycheck-pycheckers json-mode elisp-slime-nav slime-company notify slime drag-stuff helm-gtags rpm-spec-mode company-qml qml-mode graphviz-dot-mode stickyfunc-enhance dockerfile-mode cython-mode feature-mode helm-emmet helm-package yaml-mode xmlgen scss-mode rfringe request-deferred pythonic python-pep8 pymacs pyflakes pycomplete pos-tip multi-web-mode marmalade markdown-mode+ magit karma jsx-mode json-rpc jinja2-mode jade-mode helm-projectile helm-css-scss helm-ag fuzzy flymake-python-pyflakes flymake-less flymake-json flymake-jshint flymake-cursor fill-column-indicator fabric emmet-mode discover-js2-refactor company-tern company-jedi)))
  '(safe-local-variable-values
    ((js2-basic-offset . 2)
     (whitespace-line-column . 120)
@@ -182,15 +182,16 @@
 ;; Setting frame name if projectile project found
 (defun my:setup-frame-name ()
   (set-frame-name
-   (condition-case nil
-       (capitalize (projectile-project-name))
-     (error (progn (message "Projectile project not found")
-                   default-directory)))))
+   (if (string= (projectile-project-name) "-")
+       (progn (message "Projectile project not found")
+              default-directory)
+     (capitalize (projectile-project-name)))))
 
 ;; -----------------------------------------------------------------------------
 ;; MODULES AND EXTENSIONS
 ;; -----------------------------------------------------------------------------
 (global-company-mode)
+(global-flycheck-mode)
 
 ;;(load-file "/home/alex/.emacs.d/emacs-for-python/epy-init.el")
 ; (require 'epy-setup)      ;; It will setup other loads, it is required!
@@ -310,6 +311,8 @@
 
 ;; Slime setup
 (slime-setup '(slime-company))
+(add-to-list 'slime-contribs 'slime-repl)
+(add-to-list 'slime-contribs 'inferior-slime)
 
 ;; Projectile and helm integration
 (projectile-mode)
@@ -357,10 +360,12 @@
 (put 'dired-find-alternate-file 'disabled nil)
 
 
-(defun my/python-mode-hook ()
-  (add-to-list 'company-backends 'company-jedi))
-(add-hook 'python-mode-hook 'jedi:setup)
-(add-hook 'python-mode-hook 'my/python-mode-hook)
+(defun my:python-mode-hook ()
+  (add-to-list 'company-backends 'company-jedi)
+  (jedi:setup))
+(add-hook 'python-mode-hook 'my:python-mode-hook)
+
+
 (setq jedi:complete-on-dot t)
 
 (put 'upcase-region 'disabled nil)
