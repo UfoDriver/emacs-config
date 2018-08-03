@@ -1,16 +1,24 @@
-;  Emacs init file
-
+;;; package --- Emacs init file
+;;; Commentary:
+;;; my custom Emacs initialization file
+;;; Code:
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default default default italic underline success warning error])
  '(column-number-mode t)
  '(css-indent-offset 2)
  '(custom-enabled-themes (quote (tango-dark)))
+ '(custom-safe-themes
+   (quote
+    ("3448e3f5d01b39ce75962328a5310438e4a19e76e4b691c21c8e04ca318a5f62" default)))
  '(ecb-options-version "2.40")
  '(fill-column 80)
  '(flycheck-gcc-language-standard "c++11")
+ '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(js-switch-indent-offset 2)
  '(js2-basic-offset 2)
@@ -18,9 +26,16 @@
  '(markdown-command "markdown2-3 -x tables -x smarty-pants -x strike")
  '(markdown-command-needs-filename t)
  '(menu-bar-mode nil)
+ '(package-archives
+   (quote
+    (("marmalade" . "http://marmalade-repo.org/packages/")
+     ("melpa" . "http://melpa.milkbox.net/packages/")
+     ("original" . "http://tromey.com/elpa/")
+     ("gnu" . "https://elpa.gnu.org/packages/"))))
  '(package-selected-packages
    (quote
     (ediprolog ctags liso-theme json-navigator company-ansible flycheck-pycheckers json-mode elisp-slime-nav slime-company notify slime drag-stuff helm-gtags rpm-spec-mode company-qml qml-mode graphviz-dot-mode stickyfunc-enhance dockerfile-mode cython-mode feature-mode helm-emmet helm-package yaml-mode xmlgen scss-mode rfringe request-deferred pythonic python-pep8 pymacs pyflakes pycomplete pos-tip multi-web-mode marmalade markdown-mode+ magit karma jsx-mode json-rpc jinja2-mode jade-mode helm-projectile helm-css-scss helm-ag fuzzy flymake-python-pyflakes flymake-less flymake-json flymake-jshint flymake-cursor fill-column-indicator fabric emmet-mode discover-js2-refactor company-tern company-jedi)))
+ '(projectile-completion-system (quote helm))
  '(safe-local-variable-values
    ((js2-basic-offset . 2)
     (whitespace-line-column . 120)
@@ -32,8 +47,13 @@
     (indent-tabs-mode t)))
  '(scroll-bar-mode nil)
  '(show-paren-mode t)
+ '(tab-width 4)
  '(tool-bar-mode nil)
- '(whitespace-line-column 100))
+ '(whitespace-display-mappings (quote ((space-mark 32) (newline-mark 13) (tab-mark 9))))
+ '(whitespace-line-column 100)
+ '(whitespace-style
+   (quote
+    (face trailing tabs spaces lines-tail newline empty indentation space-after-tab space-before-tab space-mark tab-mark newline-mark))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -56,27 +76,7 @@
 ;; GLOBAL SETTINGS
 ;; -----------------------------------------------------------------------------
 
-;(setq-default show-trailing-whitespace t)
-
-;; Let's see trailing whitespaces and no nonprintable symbols
-(setq whitespace-display-mappings
-      '((space-mark 32)
-        (space-mark 160)
-        (newline-mark 10 [10])
-        (tab-mark 9)))
-(setq whitespace-style
-      '(face tabs spaces trailing lines-tail space-before-tab newline indentation empty space-after-tab space-mark tab-mark newline-mark))
 (global-whitespace-mode)
-
-;; Indenting with spaces and tab is equal to 4 spaces
-(setq-default indent-tabs-mode nil)
-(setq-default tab-width 4)
-
-;; Disabling the auto-pairing of parenthesis
-;(setq skeleton-pair nil)
-
-;; Line delimiter
-(setq default-buffer-file-coding-system 'utf-8-unix)
 
 ;; Scrolling tweaks
 (setq scroll-step 1)
@@ -90,8 +90,7 @@
 
 ;; HTML indent
 (setq sgml-basic-offset 4)
-;; To make this change specific only to html-mode, you can use the following
-;; code:
+;; To make this change specific only to html-mode, you can use the following code:
 (add-hook 'html-mode-hook
           (lambda ()
             ;; Default indentation is usually 2 spaces, changing to 4.
@@ -109,32 +108,6 @@
             (set (make-local-variable 'indent-tabs-mode) t)
             (set (make-local-variable 'tab-width) 8)))
 
-;; Better buffer list
-;; (global-set-key (kbd "C-x C-b") 'ibuffer)
-(autoload 'ibuffer "ibuffer" "List buffers." t)
-(setq ibuffer-saved-filter-groups
-      (quote (("default"
-               ("JavaScript" (or
-                              (mode . javascript-mode)
-                              (mode . js-mode)
-                              (mode . js2-mode)))
-               ("Web" (or
-                       (mode . web-mode)
-                       (mode . html-mode)
-                       (name . "^.*\\.jspf$")))
-               ("Emacs" (or
-                         (name . "^\\*scratch\\*$")
-                         (name . "^\\*Messages\\*$")))
-               ("Services" (name . "^\\*.*\\*$"))
-               ("Rubies" (name . "^.*\\.rb$"))
-               ("Pythons" (name . "^.*\\.py$"))
-               ("Emacs Lisp" (name . "^.*\\.el$"))
-               ("Dired" (mode . dired-mode))
-               ("CSS" (or
-                       (mode . css-mode)
-                       (mode . less-css-mode)))))))
-
-
 ;; Selection now like in other editors
 (delete-selection-mode t)
 
@@ -146,12 +119,6 @@
 ;; -----------------------------------------------------------------------------
 
 (require 'package)
-(setq package-archives
-      '(("original"  . "http://tromey.com/elpa/")
-        ("gnu"       . "http://elpa.gnu.org/packages/")
-        ("marmalade" . "http://marmalade-repo.org/packages/")
-        ("melpa"     . "http://melpa.milkbox.net/packages/")))
-
 (package-initialize)
 
 ;; -----------------------------------------------------------------------------
@@ -169,20 +136,21 @@
 
 ;; Set window width
 (defun my:set-window-width (x)
-  "Set current window width"
+  "Set current window width to X chars."
   (adjust-window-trailing-edge (selected-window)
                                (- x (window-width))
                                t))
 
 ;; Set window width to 80 columns
 (defun my:set-80-columns ()
-  "Set current window to 80 columns width"
+  "Set current window to 80 columns width."
   (interactive)
   (my:set-window-width 81))
 
 
 ;; Setting frame name if projectile project found
 (defun my:setup-frame-name ()
+  "Set up frame name with projectile support."
   (set-frame-name
    (if (string= (projectile-project-name) "-")
        (progn (message "Projectile project not found")
@@ -242,7 +210,7 @@
 
 ;; Magit - git integration
 (require 'magit)
-(setq magit-last-seen-setup-instructions "1.4.0")
+(setq-default magit-last-seen-setup-instructions "1.4.0")
 
 (drag-stuff-global-mode t)
 (drag-stuff-define-keys)
@@ -306,7 +274,7 @@
 (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
 
 ;; Karma runner loading
-(require 'karma)
+;; (require 'karma)
 
 ;; Helm framework
 (require 'helm-config)
@@ -322,7 +290,6 @@
 
 ;; Projectile and helm integration
 (projectile-mode)
-(setq projectile-completion-system 'helm)
 (helm-projectile-on)
 (projectile-mode)
 (global-set-key (kbd "M-x") 'helm-M-x)
@@ -367,6 +334,7 @@
 
 
 (defun my:python-mode-hook ()
+  "My custom hook for python mode."
   (add-to-list 'company-backends 'company-jedi)
   (jedi:setup))
 (add-hook 'python-mode-hook 'my:python-mode-hook)
@@ -393,3 +361,4 @@
     (setq jedi:environment-root env-path)))
 
 (my:setup-frame-name)
+;;; init.el ends here
