@@ -10,6 +10,7 @@
  '(custom-enabled-themes (quote (tango-dark)))
  '(ecb-options-version "2.40")
  '(fill-column 80)
+ '(flycheck-gcc-language-standard "c++11")
  '(inhibit-startup-screen t)
  '(js-switch-indent-offset 2)
  '(js2-basic-offset 2)
@@ -19,7 +20,7 @@
  '(menu-bar-mode nil)
  '(package-selected-packages
    (quote
-    (company-ansible flycheck-pycheckers json-mode elisp-slime-nav slime-company notify slime drag-stuff helm-gtags rpm-spec-mode company-qml qml-mode graphviz-dot-mode stickyfunc-enhance dockerfile-mode cython-mode feature-mode helm-emmet helm-package yaml-mode xmlgen scss-mode rfringe request-deferred pythonic python-pep8 pymacs pyflakes pycomplete pos-tip multi-web-mode marmalade markdown-mode+ magit karma jsx-mode json-rpc jinja2-mode jade-mode helm-projectile helm-css-scss helm-ag fuzzy flymake-python-pyflakes flymake-less flymake-json flymake-jshint flymake-cursor fill-column-indicator fabric emmet-mode discover-js2-refactor company-tern company-jedi)))
+    (ediprolog ctags liso-theme json-navigator company-ansible flycheck-pycheckers json-mode elisp-slime-nav slime-company notify slime drag-stuff helm-gtags rpm-spec-mode company-qml qml-mode graphviz-dot-mode stickyfunc-enhance dockerfile-mode cython-mode feature-mode helm-emmet helm-package yaml-mode xmlgen scss-mode rfringe request-deferred pythonic python-pep8 pymacs pyflakes pycomplete pos-tip multi-web-mode marmalade markdown-mode+ magit karma jsx-mode json-rpc jinja2-mode jade-mode helm-projectile helm-css-scss helm-ag fuzzy flymake-python-pyflakes flymake-less flymake-json flymake-jshint flymake-cursor fill-column-indicator fabric emmet-mode discover-js2-refactor company-tern company-jedi)))
  '(safe-local-variable-values
    ((js2-basic-offset . 2)
     (whitespace-line-column . 120)
@@ -45,7 +46,8 @@
  '(whitespace-empty ((t (:background "DarkGoldenrod4" :foreground "firebrick"))))
  '(whitespace-indentation ((t (:background "gray15" :foreground "firebrick"))))
  '(whitespace-space-after-tab ((t (:background "gray15" :foreground "firebrick"))))
- '(whitespace-space-before-tab ((t (:background "gray15" :foreground "firebrick")))))
+ '(whitespace-space-before-tab ((t (:background "gray15" :foreground "firebrick"))))
+ '(whitespace-tab ((t (:background "gray18")))))
 
 (add-to-list 'load-path "~/.emacs.d/site-lisp/")
 
@@ -310,9 +312,13 @@
 (require 'helm-config)
 
 ;; Slime setup
-(slime-setup '(slime-company))
-(add-to-list 'slime-contribs 'slime-repl)
-(add-to-list 'slime-contribs 'inferior-slime)
+(slime-setup '(slime-company slime-repl inferior-slime slime-fancy slime-presentations
+                             slime-presentation-streams))
+(setq inferior-lisp-program "/usr/bin/sbcl")
+(let ((hyperspec-dir (expand-file-name (concat user-emacs-directory "/HyperSpec/"))))
+  (if (file-directory-p hyperspec-dir)
+      (setf common-lisp-hyperspec-root hyperspec-dir)))
+
 
 ;; Projectile and helm integration
 (projectile-mode)
@@ -387,5 +393,3 @@
     (setq jedi:environment-root env-path)))
 
 (my:setup-frame-name)
-
-(setq inferior-lisp-program "/usr/bin/sbcl")
