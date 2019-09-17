@@ -218,16 +218,6 @@
 ;; -----------------------------------------------------------------------------
 ;; MODULES AND EXTENSIONS
 ;; -----------------------------------------------------------------------------
-;;(load-file "/home/alex/.emacs.d/emacs-for-python/epy-init.el")
-; (require 'epy-setup)      ;; It will setup other loads, it is required!
-; (require 'epy-python)     ;; If you want the python facilities [optional]
-; (require 'epy-completion) ;; If you want the autocompletion settings [optional]
-; (require 'epy-editing)    ;; For configurations related to editing [optional]
-
-;;(epy-setup-checker "pyflakes %f")
-;;(epy-django-snippets)
-;;(epy-setup-ipython)
-
 ;; ;; Jinja2 support
 ;; (require 'jinja2-mode)
 
