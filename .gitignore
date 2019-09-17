@@ -15,3 +15,8 @@ ede-projects.el
 eshell/
 recentf
 projectile-bookmarks.eld
+HyperSpec/
+request/
+session.*
+tramp
+network-security.data

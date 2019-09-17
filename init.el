@@ -18,6 +18,15 @@
  '(ecb-options-version "2.40")
  '(fill-column 80)
  '(flycheck-gcc-language-standard "c++11")
+ '(geiser-active-implementations (quote (guile)))
+ '(geiser-default-implementation (quote guile))
+ '(geiser-guile-binary "guile2.2")
+ '(helm-gtags-auto-update t)
+ '(helm-gtags-ignore-case t)
+ '(helm-gtags-prefix-key "-cg")
+ '(helm-gtags-pulse-at-cursor t)
+ '(helm-gtags-suggested-key-mapping t)
+ '(helm-gtags-use-input-at-cursor t)
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(js-switch-indent-offset 2)
@@ -26,6 +35,8 @@
  '(markdown-command "markdown2-3 -x tables -x smarty-pants -x strike")
  '(markdown-command-needs-filename t)
  '(menu-bar-mode nil)
+ '(mouse-wheel-progressive-speed nil)
+ '(mouse-wheel-scroll-amount (quote (1 ((control)) ((shift) . 5))))
  '(package-archives
    (quote
     (("marmalade" . "http://marmalade-repo.org/packages/")
@@ -34,8 +45,9 @@
      ("gnu" . "https://elpa.gnu.org/packages/"))))
  '(package-selected-packages
    (quote
-    (ediprolog ctags liso-theme json-navigator company-ansible flycheck-pycheckers json-mode elisp-slime-nav slime-company notify slime drag-stuff helm-gtags rpm-spec-mode company-qml qml-mode graphviz-dot-mode stickyfunc-enhance dockerfile-mode cython-mode feature-mode helm-emmet helm-package yaml-mode xmlgen scss-mode rfringe request-deferred pythonic python-pep8 pymacs pyflakes pycomplete pos-tip multi-web-mode marmalade markdown-mode+ magit karma jsx-mode json-rpc jinja2-mode jade-mode helm-projectile helm-css-scss helm-ag fuzzy flymake-python-pyflakes flymake-less flymake-json flymake-jshint flymake-cursor fill-column-indicator fabric emmet-mode discover-js2-refactor company-tern company-jedi)))
+    (queue cider fsm jabber jabber-otr helm-unicode iedit use-package lsp-ui ccls company-lsp scad-mode geiser csv-mode ediprolog ctags liso-theme json-navigator company-ansible flycheck-pycheckers json-mode elisp-slime-nav slime-company notify slime drag-stuff helm-gtags rpm-spec-mode company-qml qml-mode graphviz-dot-mode stickyfunc-enhance dockerfile-mode cython-mode feature-mode helm-emmet helm-package yaml-mode xmlgen scss-mode rfringe request-deferred python-pep8 pymacs pyflakes pycomplete pos-tip multi-web-mode marmalade markdown-mode+ magit jsx-mode json-rpc jinja2-mode jade-mode helm-projectile helm-css-scss helm-ag fuzzy flymake-python-pyflakes flymake-less flymake-json flymake-jshint flymake-cursor fill-column-indicator fabric emmet-mode discover-js2-refactor company-tern company-jedi)))
  '(projectile-completion-system (quote helm))
+ '(projectile-switch-project-action (quote helm-projectile-find-file))
  '(safe-local-variable-values
    ((js2-basic-offset . 2)
     (whitespace-line-column . 120)
@@ -45,7 +57,9 @@
     (css-indent-offset . 2)
     (whitespace-line-column . 100)
     (indent-tabs-mode t)))
+ '(scheme-program-name "guile2.2")
  '(scroll-bar-mode nil)
+ '(scroll-step 1)
  '(show-paren-mode t)
  '(tab-width 4)
  '(tool-bar-mode nil)
@@ -71,55 +85,100 @@
 
 (add-to-list 'load-path "~/.emacs.d/site-lisp/")
 
+(require 'package)
+(setq package-enable-at-startup nil)
+(package-initialize)
+;; (require 'use-package)
+
+;; (unless (package-installed-p 'use-package)
+;;   (package-refresh-contents)
+;;   (package-install 'use-package))
 
 ;; -----------------------------------------------------------------------------
 ;; GLOBAL SETTINGS
 ;; -----------------------------------------------------------------------------
 
+;; http://cachestocaches.com/2015/8/getting-started-use-package/
+;; https://github.com/jwiegley/use-package
+(eval-when-compile
+  ;;  Following line is not needed if use-package.el is in ~/.emacs.d
+  ;; (add-to-list 'load-path "<path where use-package is installed>")
+  ;; (package-activate 'use-package)
+  ;; (package-activate 'lsp-ui)
+  ;; (package-activate 'company-lsp)
+  (require 'use-package))
+
+
 (global-whitespace-mode)
-
-;; Scrolling tweaks
-(setq scroll-step 1)
-(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
-(setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
-(setq mouse-wheel-follow-mouse 't)
-
-;; Unique buffer names
-(require 'uniquify)
-(setq uniquify-buffer-name-style 'post-forward uniquify-separator ":")
-
-;; HTML indent
-(setq sgml-basic-offset 4)
-;; To make this change specific only to html-mode, you can use the following code:
-(add-hook 'html-mode-hook
-          (lambda ()
-            ;; Default indentation is usually 2 spaces, changing to 4.
-            (set (make-local-variable 'sgml-basic-offset) 2)
-            (emmet-mode)))
-
-;; Smarter minibuffer autocompletion
-(require 'ido)
-(ido-mode t)
+;; Selection now like in other editors
+(delete-selection-mode t)
+;; Electric pairs are useful when gets used
+(electric-pair-mode)
 
 ;; Asm mode tabs and tab width
 (add-hook 'asm-mode-hook
           (lambda ()
-            ;; Default indentation is usually 2 spaces, changing to 4.
             (set (make-local-variable 'indent-tabs-mode) t)
-            (set (make-local-variable 'tab-width) 8)))
+            (set (make-local-variable 'tab-width) 10)))
 
-;; Selection now like in other editors
-(delete-selection-mode t)
-
-;; Electric pairs are useful when gets used
-(electric-pair-mode)
 
 ;; -----------------------------------------------------------------------------
 ;; PACKAGES AND SOURCES
 ;; -----------------------------------------------------------------------------
 
-(require 'package)
-(package-initialize)
+;; https://www.reddit.com/r/emacs/comments/audffp/tip_how_to_use_a_stable_and_fast_environment_to/
+(use-package lsp-mode
+  :hook (prog-mode . lsp))
+
+(use-package lsp-ui)
+
+(use-package company-lsp)
+(setq lsp-enable-snippet nil)
+
+(use-package ccls
+  :after projectile
+;  :ensure-system-package ccls
+  :custom
+  (ccls-args nil)
+  (ccls-executable (executable-find "/home/alex/tmp/ccls/Release/ccls"))
+  (projectile-project-root-files-top-down-recurring
+   (append '("compile_commands.json" ".ccls")
+           projectile-project-root-files-top-down-recurring))
+  :config (push ".ccls-cache" projectile-globally-ignored-directories))
+
+(use-package slime
+  :init
+  (setq-default inferior-lisp-program "/usr/bin/sbcl")
+  :config
+  (slime-setup '(slime-company slime-repl inferior-slime slime-fancy slime-presentations
+                               slime-presentation-streams))
+  (let ((hyperspec-dir (expand-file-name (concat user-emacs-directory "/HyperSpec/"))))
+    (if (file-directory-p hyperspec-dir)
+        (setq-default common-lisp-hyperspec-root hyperspec-dir))))
+
+(use-package drag-stuff
+  :config
+  (drag-stuff-global-mode t)
+  (drag-stuff-define-keys))
+
+(use-package magit
+  :init
+  (setq-default magit-last-seen-setup-instructions "1.4.0"))
+
+(use-package company
+  :init
+  (global-company-mode))
+
+(use-package flycheck
+  :init
+  (global-flycheck-mode))
+
+(use-package feature-mode)
+
+(use-package uniquify
+  :init
+  (setq-default uniquify-buffer-name-style 'post-forward uniquify-separator ":"))
+
 
 ;; -----------------------------------------------------------------------------
 ;; CUSTOM KEYBINDINGS
@@ -128,7 +187,6 @@
 ;; Enter for newline-and-indent in programming modes
 (add-hook 'prog-mode-hook '(lambda ()
   (local-set-key (kbd "RET") 'newline-and-indent)))
-
 
 ;; -----------------------------------------------------------------------------
 ;; CUSTOM FUNCTIONS
@@ -160,9 +218,6 @@
 ;; -----------------------------------------------------------------------------
 ;; MODULES AND EXTENSIONS
 ;; -----------------------------------------------------------------------------
-(global-company-mode)
-(global-flycheck-mode)
-
 ;;(load-file "/home/alex/.emacs.d/emacs-for-python/epy-init.el")
 ; (require 'epy-setup)      ;; It will setup other loads, it is required!
 ; (require 'epy-python)     ;; If you want the python facilities [optional]
@@ -201,19 +256,8 @@
             (setq-local sgml-basic-offset js2-basic-offset)))
 
 ;; Right fringe (gutter)
-(require 'rfringe)
+;; (require 'rfringe)
 ;; (remove-hook 'after-change-major-mode-hook 'rfringe-mode)
-
-;; Feature mode (cucumber, lettuce)
-(require 'feature-mode)
-(add-to-list 'auto-mode-alist '("\.feature$" . feature-mode))
-
-;; Magit - git integration
-(require 'magit)
-(setq-default magit-last-seen-setup-instructions "1.4.0")
-
-(drag-stuff-global-mode t)
-(drag-stuff-define-keys)
 
 ;; -----------------------------------------------------------------------------
 ;; TO SORT OUT
@@ -223,88 +267,39 @@
 ;;(autoload 'scss-mode "scss-mode")
 ;;(add-to-list 'auto-mode-alist '("\\.scss\\'" . scss-mode))
 
-
 ; Django mode
 ;;(require 'django-html-mode)
 ;;(require 'django-mode)
 ;;(yas/load-directory "/home/alex/tmp/emacs/django-mode")
-
-; YAML mode
-;;(require 'yaml-mode)
-;;(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-
 
 ; Emacs code browser
 ;;(add-to-list 'load-path
 ;;             "~/tmp/emacs/ecb/")
 ;;(require 'ecb)
 
-
-; MozRepl
-;;(require 'moz)
-
-;;; Usage
-;; Run M-x moz-reload-on-save-mode to switch moz-reload on/off in the
-;; current buffer.
-;; When active, saving the buffer triggers Firefox
-;; to reload its current page.
-
-;;(define-minor-mode moz-reload-on-save-mode
-;;  "Moz Reload On Save Minor Mode"
-;;  nil " Reload" nil
-;;  (if moz-reload-on-save-mode
-      ;; Edit hook buffer-locally.
-;;      (add-hook 'after-save-hook 'moz-firefox-reload nil t)
-;;    (remove-hook 'after-save-hook 'moz-firefox-reload t)))
-
-;;(defun moz-firefox-reload ()
-;;  (comint-send-string (inferior-moz-process) "BrowserReload();"))
-
-
 ;; (add-to-list 'auto-mode-alist '("\\.jsp$") . web-mode)
 
 
 ;; Org mode todo states
-(setq org-todo-keywords '("TODO" "BLOCKED" "DONE"))
-(setq org-todo-keyword-faces
-      '(("BLOCKED" . org-warning)))
+;; (setq org-todo-keywords '("TODO" "BLOCKED" "DONE"))
+;; (setq org-todo-keyword-faces
+;;       '(("BLOCKED" . org-warning)))
 
 
 ;; Tern - javascript refactoring library settings
 (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
 
-;; Karma runner loading
-;; (require 'karma)
-
 ;; Helm framework
 (require 'helm-config)
 
-;; Slime setup
-(slime-setup '(slime-company slime-repl inferior-slime slime-fancy slime-presentations
-                             slime-presentation-streams))
-(setq inferior-lisp-program "/usr/bin/sbcl")
-(let ((hyperspec-dir (expand-file-name (concat user-emacs-directory "/HyperSpec/"))))
-  (if (file-directory-p hyperspec-dir)
-      (setf common-lisp-hyperspec-root hyperspec-dir)))
-
-
 ;; Projectile and helm integration
-(projectile-mode)
+(projectile-mode t)
+(define-key projectile-mode-map (kbd "C-c C-p") 'projectile-command-map)
 (helm-projectile-on)
-(projectile-mode)
 (global-set-key (kbd "M-x") 'helm-M-x)
 (global-set-key (kbd "C-x C-b") 'helm-mini)
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 (global-set-key (kbd "C-x C-f") 'helm-find-files)
-
-;; Helm gtags setup
-(setq
- helm-gtags-ignore-case t
- helm-gtags-auto-update t
- helm-gtags-use-input-at-cursor t
- helm-gtags-pulse-at-cursor t
- helm-gtags-prefix-key "\C-cg"
- helm-gtags-suggested-key-mapping t)
 
 (require 'helm-gtags)
 ;; Enable helm-gtags-mode
@@ -329,8 +324,6 @@
 (if (file-exists-p "~/.emacs.d/local-init.el")
     (load-file "~/.emacs.d/local-init.el")
   (message "No local-init.el found"))
-(put 'narrow-to-region 'disabled nil)
-(put 'dired-find-alternate-file 'disabled nil)
 
 
 (defun my:python-mode-hook ()
@@ -342,6 +335,8 @@
 
 (setq jedi:complete-on-dot t)
 
+(put 'narrow-to-region 'disabled nil)
+(put 'dired-find-alternate-file 'disabled nil)
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
 
