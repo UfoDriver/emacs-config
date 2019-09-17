@@ -29,6 +29,7 @@
  '(helm-gtags-use-input-at-cursor t)
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
+ '(jedi:complete-on-dot t)
  '(js-switch-indent-offset 2)
  '(js2-basic-offset 2)
  '(magit-push-always-verify nil)
@@ -45,7 +46,7 @@
      ("gnu" . "https://elpa.gnu.org/packages/"))))
  '(package-selected-packages
    (quote
-    (queue cider fsm jabber jabber-otr helm-unicode iedit use-package lsp-ui ccls company-lsp scad-mode geiser csv-mode ediprolog ctags liso-theme json-navigator company-ansible flycheck-pycheckers json-mode elisp-slime-nav slime-company notify slime drag-stuff helm-gtags rpm-spec-mode company-qml qml-mode graphviz-dot-mode stickyfunc-enhance dockerfile-mode cython-mode feature-mode helm-emmet helm-package yaml-mode xmlgen scss-mode rfringe request-deferred python-pep8 pymacs pyflakes pycomplete pos-tip multi-web-mode marmalade markdown-mode+ magit jsx-mode json-rpc jinja2-mode jade-mode helm-projectile helm-css-scss helm-ag fuzzy flymake-python-pyflakes flymake-less flymake-json flymake-jshint flymake-cursor fill-column-indicator fabric emmet-mode discover-js2-refactor company-tern company-jedi)))
+    (queue cider fsm jabber jabber-otr helm-unicode iedit use-package lsp-ui ccls company-lsp scad-mode geiser csv-mode ediprolog ctags liso-theme json-navigator company-ansible flycheck-pycheckers json-mode elisp-slime-nav slime-company notify slime drag-stuff helm-gtags rpm-spec-mode company-qml qml-mode graphviz-dot-mode stickyfunc-enhance dockerfile-mode cython-mode feature-mode helm-emmet helm-package yaml-mode xmlgen scss-mode request-deferred python-pep8 pymacs pyflakes pycomplete pos-tip multi-web-mode marmalade markdown-mode+ magit jsx-mode json-rpc jinja2-mode jade-mode helm-projectile helm-css-scss helm-ag fuzzy flymake-python-pyflakes flymake-less flymake-json flymake-jshint flymake-cursor fill-column-indicator fabric emmet-mode discover-js2-refactor company-tern company-jedi)))
  '(projectile-completion-system (quote helm))
  '(projectile-switch-project-action (quote helm-projectile-find-file))
  '(safe-local-variable-values
@@ -179,6 +180,16 @@
   :init
   (setq-default uniquify-buffer-name-style 'post-forward uniquify-separator ":"))
 
+(use-package projectile
+  :bind-keymap
+  ("C-c C-p" . projectile-command-map))
+
+(use-package helm
+  :bind
+  (( "M-x" . helm-M-x)
+   ("C-x C-b" . helm-mini)
+   ("M-y" . helm-show-kill-ring)
+   ("C-x C-f" . helm-find-files)))
 
 ;; -----------------------------------------------------------------------------
 ;; CUSTOM KEYBINDINGS
@@ -216,7 +227,7 @@
      (capitalize (projectile-project-name)))))
 
 ;; -----------------------------------------------------------------------------
-;; MODULES AND EXTENSIONS
+;; TO SORT OUT
 ;; -----------------------------------------------------------------------------
 ;; ;; Jinja2 support
 ;; (require 'jinja2-mode)
@@ -239,19 +250,11 @@
 ;;      (lambda () (progn
 ;;                   (setq js-indent-level 2)
 ;;                   (flymake-mode t))))
-(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
-(add-to-list 'auto-mode-alist '("\\.jsx$" . js2-jsx-mode))
-(add-hook 'js2-jsx-mode-hook
-          (lambda ()
-            (setq-local sgml-basic-offset js2-basic-offset)))
-
-;; Right fringe (gutter)
-;; (require 'rfringe)
-;; (remove-hook 'after-change-major-mode-hook 'rfringe-mode)
-
-;; -----------------------------------------------------------------------------
-;; TO SORT OUT
-;; -----------------------------------------------------------------------------
+;; (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+;; (add-to-list 'auto-mode-alist '("\\.jsx$" . js2-jsx-mode))
+;; (add-hook 'js2-jsx-mode-hook
+;;           (lambda ()
+;;             (setq-local sgml-basic-offset js2-basic-offset)))
 
 ;; SASS mode
 ;;(autoload 'scss-mode "scss-mode")
@@ -262,34 +265,11 @@
 ;;(require 'django-mode)
 ;;(yas/load-directory "/home/alex/tmp/emacs/django-mode")
 
-; Emacs code browser
-;;(add-to-list 'load-path
-;;             "~/tmp/emacs/ecb/")
-;;(require 'ecb)
-
-;; (add-to-list 'auto-mode-alist '("\\.jsp$") . web-mode)
-
-
-;; Org mode todo states
-;; (setq org-todo-keywords '("TODO" "BLOCKED" "DONE"))
-;; (setq org-todo-keyword-faces
-;;       '(("BLOCKED" . org-warning)))
-
-
 ;; Tern - javascript refactoring library settings
-(add-hook 'js2-mode-hook (lambda () (tern-mode t)))
-
-;; Helm framework
-(require 'helm-config)
+;; (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
 
 ;; Projectile and helm integration
-(projectile-mode t)
-(define-key projectile-mode-map (kbd "C-c C-p") 'projectile-command-map)
 (helm-projectile-on)
-(global-set-key (kbd "M-x") 'helm-M-x)
-(global-set-key (kbd "C-x C-b") 'helm-mini)
-(global-set-key (kbd "M-y") 'helm-show-kill-ring)
-(global-set-key (kbd "C-x C-f") 'helm-find-files)
 
 (require 'helm-gtags)
 ;; Enable helm-gtags-mode
@@ -323,14 +303,12 @@
 (add-hook 'python-mode-hook 'my:python-mode-hook)
 
 
-(setq jedi:complete-on-dot t)
-
 (put 'narrow-to-region 'disabled nil)
 (put 'dired-find-alternate-file 'disabled nil)
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
 
-(add-to-list 'company-backends 'company-tern)
+;; (add-to-list 'company-backends 'company-tern)
 
 ;; Dirty hack to set jedi:environment-root to active virtualenv (if any)
 (let ((python-path (executable-find "python"))
