@@ -235,14 +235,6 @@
 ;; ;; Less CSS
 ;; (require 'less-css-mode)
 
-;; ;; Fill column indicator
-;; (require 'fill-column-indicator)
-;; (add-hook 'python-mode-hook 'fci-mode)
-;(setq fci-rule-width 1)
-;(setq fci-rule-color "darkblue")
-;fci-rule-character
-;(add-hook 'after-change-major-mode-hook 'fci-mode)
-
 ;; JS hint mode
 ;; (require 'flymake-jshint)
 ;; (flymake-jshint-load)
