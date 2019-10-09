@@ -32,6 +32,7 @@
  '(jedi:complete-on-dot t)
  '(js-switch-indent-offset 2)
  '(js2-basic-offset 2)
+ '(lsp-enable-snippet nil)
  '(magit-push-always-verify nil)
  '(markdown-command "markdown2-3 -x tables -x smarty-pants -x strike")
  '(markdown-command-needs-filename t)
@@ -46,18 +47,13 @@
      ("gnu" . "https://elpa.gnu.org/packages/"))))
  '(package-selected-packages
    (quote
-    (queue cider fsm jabber jabber-otr helm-unicode iedit use-package lsp-ui ccls company-lsp scad-mode geiser csv-mode ediprolog ctags liso-theme json-navigator company-ansible flycheck-pycheckers json-mode elisp-slime-nav slime-company notify slime drag-stuff helm-gtags rpm-spec-mode company-qml qml-mode graphviz-dot-mode stickyfunc-enhance dockerfile-mode cython-mode feature-mode helm-emmet helm-package yaml-mode xmlgen scss-mode request-deferred python-pep8 pymacs pyflakes pycomplete pos-tip multi-web-mode marmalade markdown-mode+ magit jsx-mode json-rpc jinja2-mode jade-mode helm-projectile helm-css-scss helm-ag fuzzy flymake-python-pyflakes flymake-less flymake-json flymake-jshint flymake-cursor fill-column-indicator fabric emmet-mode discover-js2-refactor company-tern company-jedi)))
+    (flycheck-mypy queue cider fsm jabber jabber-otr helm-unicode iedit use-package lsp-ui ccls company-lsp scad-mode geiser ediprolog ctags liso-theme json-navigator company-ansible flycheck-pycheckers json-mode elisp-slime-nav slime-company notify slime drag-stuff helm-gtags rpm-spec-mode company-qml qml-mode graphviz-dot-mode stickyfunc-enhance dockerfile-mode cython-mode feature-mode helm-emmet helm-package yaml-mode xmlgen scss-mode request-deferred python-pep8 pymacs pyflakes pycomplete pos-tip multi-web-mode marmalade markdown-mode+ magit jsx-mode json-rpc jinja2-mode jade-mode helm-projectile helm-css-scss helm-ag fuzzy flymake-python-pyflakes flymake-less flymake-json flymake-jshint flymake-cursor fill-column-indicator fabric emmet-mode discover-js2-refactor company-tern company-jedi)))
  '(projectile-completion-system (quote helm))
  '(projectile-switch-project-action (quote helm-projectile-find-file))
  '(safe-local-variable-values
-   ((js2-basic-offset . 2)
-    (whitespace-line-column . 120)
-    (eval progn
-          (helm-mode 1)
-          (projectile-mode))
-    (css-indent-offset . 2)
-    (whitespace-line-column . 100)
-    (indent-tabs-mode t)))
+   (quote
+    ((whitespace-line-column . 120)
+     (whitespace-line-column . 100))))
  '(scheme-program-name "guile2.2")
  '(scroll-bar-mode nil)
  '(scroll-step 1)
@@ -131,23 +127,28 @@
 (use-package lsp-mode
   :hook (prog-mode . lsp))
 
-(use-package lsp-ui)
+(use-package lsp-ui
+  :defer t)
 
-(use-package company-lsp)
-(setq lsp-enable-snippet nil)
+(use-package company-lsp
+  :defer t)
 
+;; Next form is copypaste and should be cleaned
 (use-package ccls
+  :defer t
   :after projectile
 ;  :ensure-system-package ccls
   :custom
   (ccls-args nil)
-  (ccls-executable (executable-find "/home/alex/tmp/ccls/Release/ccls"))
+  ;; (ccls-executable (executable-find "/home/alex/tmp/ccls/Release/ccls"))
   (projectile-project-root-files-top-down-recurring
    (append '("compile_commands.json" ".ccls")
            projectile-project-root-files-top-down-recurring))
-  :config (push ".ccls-cache" projectile-globally-ignored-directories))
+  :config (push ".ccls-cache" projectile-globally-ignored-directories)
+  )
 
 (use-package slime
+  :defer t
   :init
   (setq-default inferior-lisp-program "/usr/bin/sbcl")
   :config
@@ -163,6 +164,7 @@
   (drag-stuff-define-keys))
 
 (use-package magit
+  :defer t
   :init
   (setq-default magit-last-seen-setup-instructions "1.4.0"))
 
@@ -171,10 +173,15 @@
   (global-company-mode))
 
 (use-package flycheck
+  :defer t
   :init
   (global-flycheck-mode))
 
-(use-package feature-mode)
+(use-package feature-mode
+  :defer t)
+
+(use-package jinja2-mode
+  :defer t)
 
 (use-package uniquify
   :init
@@ -190,6 +197,15 @@
    ("C-x C-b" . helm-mini)
    ("M-y" . helm-show-kill-ring)
    ("C-x C-f" . helm-find-files)))
+
+;; -----------------------------------------------------------------------------
+;; ENABLED DISABLED BY DEFAULT COMMANDS
+;; -----------------------------------------------------------------------------
+
+(put 'narrow-to-region 'disabled nil)
+(put 'dired-find-alternate-file 'disabled nil)
+(put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
 
 ;; -----------------------------------------------------------------------------
 ;; CUSTOM KEYBINDINGS
@@ -229,55 +245,9 @@
 ;; -----------------------------------------------------------------------------
 ;; TO SORT OUT
 ;; -----------------------------------------------------------------------------
-;; ;; Jinja2 support
-;; (require 'jinja2-mode)
-
-;; ;; Less CSS
-;; (require 'less-css-mode)
-
-;; JS hint mode
-;; (require 'flymake-jshint)
-;; (flymake-jshint-load)
-;; (add-hook 'js-mode-hook
-;;      (lambda () (progn
-;;                   (setq js-indent-level 2)
-;;                   (flymake-mode t))))
-;; (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
-;; (add-to-list 'auto-mode-alist '("\\.jsx$" . js2-jsx-mode))
-;; (add-hook 'js2-jsx-mode-hook
-;;           (lambda ()
-;;             (setq-local sgml-basic-offset js2-basic-offset)))
-
-;; SASS mode
-;;(autoload 'scss-mode "scss-mode")
-;;(add-to-list 'auto-mode-alist '("\\.scss\\'" . scss-mode))
-
-; Django mode
-;;(require 'django-html-mode)
-;;(require 'django-mode)
-;;(yas/load-directory "/home/alex/tmp/emacs/django-mode")
-
-;; Tern - javascript refactoring library settings
-;; (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
 
 ;; Projectile and helm integration
 (helm-projectile-on)
-
-(require 'helm-gtags)
-;; Enable helm-gtags-mode
-;; (add-hook 'dired-mode-hook 'helm-gtags-mode)
-;; (add-hook 'eshell-mode-hook 'helm-gtags-mode)
-(add-hook 'c-mode-hook 'helm-gtags-mode)
-(add-hook 'c++-mode-hook 'helm-gtags-mode)
-;; (add-hook 'asm-mode-hook 'helm-gtags-mode)
-
-;; (define-key helm-gtags-mode-map (kbd "C-c g a") 'helm-gtags-tags-in-this-function)
-;; (define-key helm-gtags-mode-map (kbd "C-j") 'helm-gtags-select)
-(define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
-(define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
-;; (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
-;; (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
-
 
 ;; -----------------------------------------------------------------------------
 ;; LOCAL INITIALIZATION
@@ -288,32 +258,24 @@
   (message "No local-init.el found"))
 
 
-(defun my:python-mode-hook ()
-  "My custom hook for python mode."
-  (add-to-list 'company-backends 'company-jedi)
-  (jedi:setup))
-(add-hook 'python-mode-hook 'my:python-mode-hook)
-
-
-(put 'narrow-to-region 'disabled nil)
-(put 'dired-find-alternate-file 'disabled nil)
-(put 'upcase-region 'disabled nil)
-(put 'downcase-region 'disabled nil)
+;; (defun my:python-mode-hook ()
+;;   "My custom hook for python mode."
+;;   (add-to-list 'company-backends 'company-jedi)
+;;   (jedi:setup))
+;; (add-hook 'python-mode-hook 'my:python-mode-hook)
 
 ;; (add-to-list 'company-backends 'company-tern)
 
 ;; Dirty hack to set jedi:environment-root to active virtualenv (if any)
-(let ((python-path (executable-find "python"))
-      env-path)
-  (unless (or (string-prefix-p "/usr" python-path)
-              (string-prefix-p "/bin" python-path))
-    ;; Next line is ugly as hell
-    (setq env-path
-          (file-name-directory
-           (directory-file-name
-            (file-name-directory python-path))))
-    (message (concat "Python virtual environment detected: " env-path))
-    (setq jedi:environment-root env-path)))
+;; (let ((python-path (executable-find "python")))
+;;   (unless (or (string-prefix-p "/usr" python-path)
+;;               (string-prefix-p "/bin" python-path))
+;;     (let ((env-path
+;;            (file-name-directory
+;;             (directory-file-name
+;;              (file-name-directory python-path)))))
+;;     (message (concat "Python virtual environment detected: " env-path))
+;;     (setq jedi:environment-root env-path))))
 
 (my:setup-frame-name)
 ;;; init.el ends here
