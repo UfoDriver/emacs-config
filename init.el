@@ -49,6 +49,12 @@
    (quote
     (flycheck-mypy queue cider fsm jabber jabber-otr helm-unicode iedit use-package lsp-ui ccls company-lsp scad-mode geiser ediprolog ctags liso-theme json-navigator company-ansible flycheck-pycheckers json-mode elisp-slime-nav slime-company notify slime drag-stuff helm-gtags rpm-spec-mode company-qml qml-mode graphviz-dot-mode stickyfunc-enhance dockerfile-mode cython-mode feature-mode helm-emmet helm-package yaml-mode xmlgen scss-mode request-deferred python-pep8 pymacs pyflakes pycomplete pos-tip multi-web-mode marmalade markdown-mode+ magit jsx-mode json-rpc jinja2-mode jade-mode helm-projectile helm-css-scss helm-ag fuzzy flymake-python-pyflakes flymake-less flymake-json flymake-jshint flymake-cursor fill-column-indicator fabric emmet-mode discover-js2-refactor company-tern company-jedi)))
  '(projectile-completion-system (quote helm))
+ '(projectile-globally-ignored-directories
+   (quote
+    (".idea" ".ensime_cache" ".eunit" ".git" ".hg" ".fslckout" "_FOSSIL_" ".bzr" "_darcs" ".tox" ".svn" ".stack-work" "env" ".env" ".mypy_cache")))
+ '(projectile-project-root-files-top-down-recurring
+   (quote
+    ("compile_commands.json" ".ccls" ".svn" "CVS" "Makefile")) nil nil "Customized with use-package ccls")
  '(projectile-switch-project-action (quote helm-projectile-find-file))
  '(safe-local-variable-values
    (quote
@@ -101,8 +107,6 @@
   ;;  Following line is not needed if use-package.el is in ~/.emacs.d
   ;; (add-to-list 'load-path "<path where use-package is installed>")
   ;; (package-activate 'use-package)
-  ;; (package-activate 'lsp-ui)
-  ;; (package-activate 'company-lsp)
   (require 'use-package))
 
 
@@ -120,7 +124,7 @@
 
 
 ;; -----------------------------------------------------------------------------
-;; PACKAGES AND SOURCES
+;; PACKAGES
 ;; -----------------------------------------------------------------------------
 
 ;; https://www.reddit.com/r/emacs/comments/audffp/tip_how_to_use_a_stable_and_fast_environment_to/
@@ -141,10 +145,6 @@
   :custom
   (ccls-args nil)
   ;; (ccls-executable (executable-find "/home/alex/tmp/ccls/Release/ccls"))
-  (projectile-project-root-files-top-down-recurring
-   (append '("compile_commands.json" ".ccls")
-           projectile-project-root-files-top-down-recurring))
-  :config (push ".ccls-cache" projectile-globally-ignored-directories)
   )
 
 (use-package slime
@@ -193,10 +193,16 @@
 
 (use-package helm
   :bind
-  (( "M-x" . helm-M-x)
+  (("M-x" . helm-M-x)
    ("C-x C-b" . helm-mini)
    ("M-y" . helm-show-kill-ring)
-   ("C-x C-f" . helm-find-files)))
+   ("C-x C-f" . helm-find-files))
+  :init
+  (helm-mode 1))
+
+(use-package helm-projectile
+  :config
+  (helm-projectile-on))
 
 ;; -----------------------------------------------------------------------------
 ;; ENABLED DISABLED BY DEFAULT COMMANDS
@@ -246,8 +252,7 @@
 ;; TO SORT OUT
 ;; -----------------------------------------------------------------------------
 
-;; Projectile and helm integration
-(helm-projectile-on)
+;; Yay, nothing is here
 
 ;; -----------------------------------------------------------------------------
 ;; LOCAL INITIALIZATION
@@ -256,26 +261,6 @@
 (if (file-exists-p "~/.emacs.d/local-init.el")
     (load-file "~/.emacs.d/local-init.el")
   (message "No local-init.el found"))
-
-
-;; (defun my:python-mode-hook ()
-;;   "My custom hook for python mode."
-;;   (add-to-list 'company-backends 'company-jedi)
-;;   (jedi:setup))
-;; (add-hook 'python-mode-hook 'my:python-mode-hook)
-
-;; (add-to-list 'company-backends 'company-tern)
-
-;; Dirty hack to set jedi:environment-root to active virtualenv (if any)
-;; (let ((python-path (executable-find "python")))
-;;   (unless (or (string-prefix-p "/usr" python-path)
-;;               (string-prefix-p "/bin" python-path))
-;;     (let ((env-path
-;;            (file-name-directory
-;;             (directory-file-name
-;;              (file-name-directory python-path)))))
-;;     (message (concat "Python virtual environment detected: " env-path))
-;;     (setq jedi:environment-root env-path))))
 
 (my:setup-frame-name)
 ;;; init.el ends here
