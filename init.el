@@ -47,7 +47,7 @@
      ("gnu" . "https://elpa.gnu.org/packages/"))))
  '(package-selected-packages
    (quote
-    (flycheck-mypy queue cider fsm jabber jabber-otr helm-unicode iedit use-package lsp-ui ccls company-lsp scad-mode geiser ediprolog ctags liso-theme json-navigator company-ansible flycheck-pycheckers json-mode elisp-slime-nav slime-company notify slime drag-stuff helm-gtags rpm-spec-mode company-qml qml-mode graphviz-dot-mode stickyfunc-enhance dockerfile-mode cython-mode feature-mode helm-emmet helm-package yaml-mode xmlgen scss-mode request-deferred python-pep8 pymacs pyflakes pycomplete pos-tip multi-web-mode marmalade markdown-mode+ magit jsx-mode json-rpc jinja2-mode jade-mode helm-projectile helm-css-scss helm-ag fuzzy flymake-python-pyflakes flymake-less flymake-json flymake-jshint flymake-cursor fill-column-indicator fabric emmet-mode discover-js2-refactor company-tern company-jedi)))
+    (nasm-mode flycheck-mypy queue cider fsm jabber jabber-otr helm-unicode iedit use-package lsp-ui ccls company-lsp scad-mode geiser ediprolog ctags liso-theme json-navigator company-ansible flycheck-pycheckers json-mode elisp-slime-nav slime-company notify slime drag-stuff helm-gtags rpm-spec-mode company-qml qml-mode graphviz-dot-mode stickyfunc-enhance dockerfile-mode cython-mode feature-mode helm-emmet helm-package yaml-mode xmlgen scss-mode request-deferred python-pep8 pymacs pyflakes pycomplete pos-tip multi-web-mode marmalade markdown-mode+ magit jsx-mode json-rpc jinja2-mode jade-mode helm-projectile helm-css-scss helm-ag fuzzy fill-column-indicator fabric emmet-mode discover-js2-refactor company-tern company-jedi)))
  '(projectile-completion-system (quote helm))
  '(projectile-globally-ignored-directories
    (quote
@@ -109,6 +109,7 @@
   ;; (package-activate 'use-package)
   (require 'use-package))
 
+(setq use-package-verbose t)
 
 (global-whitespace-mode)
 ;; Selection now like in other editors
@@ -189,13 +190,15 @@
 
 (use-package projectile
   :bind-keymap
-  ("C-c C-p" . projectile-command-map))
+  ("C-c p" . projectile-command-map)
+  :bind ((:map projectile-command-map)
+         ("s s" . helm-projectile-ag)))
 
 (use-package helm
   :bind
   (("M-x" . helm-M-x)
-   ("C-x C-b" . helm-mini)
    ("M-y" . helm-show-kill-ring)
+   ("C-x C-b" . helm-mini)
    ("C-x C-f" . helm-find-files))
   :init
   (helm-mode 1))
