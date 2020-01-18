@@ -34,7 +34,7 @@
  '(js2-basic-offset 2)
  '(lsp-enable-snippet nil)
  '(magit-push-always-verify nil)
- '(markdown-command "markdown2-3 -x tables -x smarty-pants -x strike")
+ '(markdown-command "markdown2 -x tables -x smarty-pants -x strike")
  '(markdown-command-needs-filename t)
  '(menu-bar-mode nil)
  '(mouse-wheel-progressive-speed nil)
@@ -47,7 +47,7 @@
      ("gnu" . "https://elpa.gnu.org/packages/"))))
  '(package-selected-packages
    (quote
-    (nasm-mode flycheck-mypy queue cider fsm jabber jabber-otr helm-unicode iedit use-package lsp-ui ccls company-lsp scad-mode geiser ediprolog ctags liso-theme json-navigator company-ansible flycheck-pycheckers json-mode elisp-slime-nav slime-company notify slime drag-stuff helm-gtags rpm-spec-mode company-qml qml-mode graphviz-dot-mode stickyfunc-enhance dockerfile-mode cython-mode feature-mode helm-emmet helm-package yaml-mode xmlgen scss-mode request-deferred python-pep8 pymacs pyflakes pycomplete pos-tip multi-web-mode marmalade markdown-mode+ magit jsx-mode json-rpc jinja2-mode jade-mode helm-projectile helm-css-scss helm-ag fuzzy fill-column-indicator fabric emmet-mode discover-js2-refactor company-tern company-jedi)))
+    (hy-mode nasm-mode flycheck-mypy queue cider fsm jabber jabber-otr helm-unicode iedit use-package lsp-ui ccls company-lsp scad-mode geiser ediprolog ctags liso-theme json-navigator company-ansible flycheck-pycheckers json-mode elisp-slime-nav slime-company notify slime drag-stuff helm-gtags rpm-spec-mode company-qml qml-mode graphviz-dot-mode stickyfunc-enhance dockerfile-mode cython-mode feature-mode helm-emmet helm-package yaml-mode xmlgen scss-mode request-deferred python-pep8 pymacs pyflakes pycomplete pos-tip multi-web-mode marmalade markdown-mode+ magit jsx-mode json-rpc jinja2-mode jade-mode helm-projectile helm-css-scss helm-ag fuzzy fill-column-indicator fabric emmet-mode discover-js2-refactor company-tern company-jedi)))
  '(projectile-completion-system (quote helm))
  '(projectile-globally-ignored-directories
    (quote
@@ -183,6 +183,9 @@
 
 (use-package jinja2-mode
   :defer t)
+
+(use-package hy-mode
+  :mode ("\\.hy\\'" . hy-mode))
 
 (use-package uniquify
   :init
