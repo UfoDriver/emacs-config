@@ -45,6 +45,11 @@
 (use-package meson-mode
   :defer t)
 
+(use-package helm-posframe
+  :defer t
+  :init
+  (helm-posframe-enable))
+
 (use-package emacs
   :config
   (global-set-key (kbd "M-u") 'upcase-dwim)
@@ -77,17 +82,23 @@
 
 
 ;; https://www.reddit.com/r/emacs/comments/audffp/tip_how_to_use_a_stable_and_fast_environment_to/
+
+(defvar major-modes-without-lsp '(lisp-mode emacs-lisp-mode scheme-mode))
+(defun my:lsp-hook ()
+  "Check if we want to start LSP for this mode."
+  (if (member major-mode major-modes-without-lsp)
+      (message "LSP is disabled for %s, check major-modes-without-lsp varialbe" major-mode)
+    (lsp)))
+
 (use-package lsp-mode
-  :hook (prog-mode . lsp)
+  :hook (prog-mode . my:lsp-hook)
   :bind-keymap ("C-c l" . lsp-command-map)
   :config
   (setq read-process-output-max 8192)
-  (define-key lsp-mode-map (kbd "C-c l") lsp-command-map))
+  :bind-keymap
+  ("C-c l" . lsp-command-map))
 
 (use-package lsp-ui
-  :defer t)
-
-(use-package company-lsp
   :defer t)
 
 (use-package helm-lsp
@@ -132,13 +143,12 @@
   :diminish
   :config
   (global-company-mode)
-  (setq company-format-margin-function #'company-detect-icons-margin)
-  )
+  (setq company-format-margin-function #'company-detect-icons-margin))
 
-(use-package flycheck
-  :defer t
-  :init
-  (global-flycheck-mode))
+;; (use-package flycheck
+;;   :defer t
+;;   :init
+;;   (global-flycheck-mode))
 
 (use-package feature-mode
   :defer t)
