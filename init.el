@@ -96,7 +96,9 @@
   :config
   (setq read-process-output-max 8192)
   :bind-keymap
-  ("C-c l" . lsp-command-map))
+  ("C-c l" . lsp-command-map)
+  :hook
+  (lsp-mode . lsp-enable-which-key-integration))
 
 (use-package lsp-ui
   :defer t)
@@ -240,5 +242,8 @@
    `(company-scrollbar-fg ((t (:background ,(color-lighten-name bg 5)))))
    `(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
    `(company-tooltip-common ((t (:inherit font-lock-constant-face))))))
+
+
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . typescript-mode))
 
 ;;; init.el ends here

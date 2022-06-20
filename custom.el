@@ -24,9 +24,10 @@
  '(fill-column 80)
  '(flycheck-gcc-language-standard "c++11")
  '(gc-cons-threshold 1000000)
+ '(gdb-many-windows t)
  '(geiser-active-implementations '(guile))
  '(geiser-default-implementation 'guile)
- '(geiser-guile-binary "/usr/bin/guile2.2")
+ '(geiser-guile-binary "/usr/bin/guile3.0")
  '(global-company-mode t)
  '(global-whitespace-mode t)
  '(helm-gtags-auto-update t)
@@ -56,7 +57,7 @@
      ("gnu" . "https://elpa.gnu.org/packages/")
      ("org" . "https://orgmode.org/elpa/")))
  '(package-selected-packages
-   '(company helm-posframe python-pytest company-lsp spice-mode lua-mode geiser-guile helpful helm-make helm-dash dap-mode org-babel-eval-in-repl meson-mode elisp-format helm-lsp which-key diminish typescript-mode vue-mode svg yasnippet-snippets helm-slime docker-tramp hy-mode nasm-mode flycheck-mypy queue cider fsm jabber jabber-otr helm-unicode iedit use-package lsp-ui ccls scad-mode geiser ediprolog ctags liso-theme json-navigator company-ansible flycheck-pycheckers json-mode elisp-slime-nav slime-company notify slime drag-stuff helm-gtags rpm-spec-mode company-qml qml-mode graphviz-dot-mode stickyfunc-enhance dockerfile-mode cython-mode feature-mode helm-emmet helm-package yaml-mode xmlgen scss-mode request-deferred python-pep8 pymacs pyflakes pycomplete multi-web-mode marmalade markdown-mode+ magit jsx-mode json-rpc jinja2-mode helm-projectile helm-css-scss helm-ag fuzzy fabric emmet-mode company-jedi))
+   '(inspector erlang web-mode systemd company helm-posframe python-pytest spice-mode lua-mode geiser-guile helpful helm-make helm-dash dap-mode org-babel-eval-in-repl meson-mode elisp-format helm-lsp which-key diminish typescript-mode vue-mode svg yasnippet-snippets helm-slime docker-tramp hy-mode nasm-mode flycheck-mypy queue cider fsm jabber jabber-otr helm-unicode iedit use-package lsp-ui ccls scad-mode geiser ediprolog ctags liso-theme json-navigator company-ansible flycheck-pycheckers json-mode elisp-slime-nav slime-company notify slime drag-stuff helm-gtags rpm-spec-mode company-qml qml-mode graphviz-dot-mode stickyfunc-enhance dockerfile-mode cython-mode feature-mode helm-emmet helm-package yaml-mode xmlgen scss-mode request-deferred python-pep8 pymacs pyflakes pycomplete multi-web-mode marmalade markdown-mode+ magit jsx-mode json-rpc jinja2-mode helm-projectile helm-css-scss helm-ag fuzzy fabric emmet-mode))
  '(projectile-completion-system 'helm)
  '(projectile-globally-ignored-directories
    '(".idea" ".ensime_cache" ".eunit" ".git" ".hg" ".fslckout" "_FOSSIL_" ".bzr" "_darcs" ".tox" ".svn" ".stack-work" "env" ".env" ".mypy_cache"))
@@ -75,6 +76,9 @@
  '(uniquify-buffer-name-style 'post-forward nil (uniquify))
  '(uniquify-separator ":")
  '(use-package-verbose t)
+ '(web-mode-code-indent-offset 2)
+ '(web-mode-css-indent-offset 2)
+ '(web-mode-markup-indent-offset 2)
  '(whitespace-display-mappings '((space-mark 32) (newline-mark 13) (tab-mark 9)))
  '(whitespace-line-column 100)
  '(whitespace-style
