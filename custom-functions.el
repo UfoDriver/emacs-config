@@ -26,7 +26,7 @@
        (capitalize (projectile-project-name))))))
 
 (defun my:notes (prefix)
-  "Open index org file."
+  "Open index org file.  With PREFIX open attic."
   (interactive "P")
   (if prefix
       (find-file "~/Documents/Org-files/attic.org.gpg")

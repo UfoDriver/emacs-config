@@ -16,7 +16,7 @@
   (package-install 'use-package))
 
 (require 'use-package)
-(setq use-package-always-ensure t)
+;; (setq use-package-always-ensure t)
 
 ;; -----------------------------------------------------------------------------
 ;; GLOBAL SETTINGS
@@ -147,10 +147,10 @@
   (global-company-mode)
   (setq company-format-margin-function #'company-detect-icons-margin))
 
-;; (use-package flycheck
-;;   :defer t
-;;   :init
-;;   (global-flycheck-mode))
+(use-package flycheck
+  :defer t
+  :init
+  (global-flycheck-mode))
 
 (use-package feature-mode
   :defer t)

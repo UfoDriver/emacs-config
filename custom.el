@@ -70,6 +70,7 @@
  '(scroll-bar-mode nil)
  '(scroll-step 1)
  '(show-paren-mode t)
+ '(slime-company-completion 'fuzzy)
  '(tab-width 4)
  '(tool-bar-mode nil)
  '(typescript-indent-level 2)
@@ -88,11 +89,11 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :extend nil :stipple nil :background "#2e3436" :foreground "#eeeeec" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 98 :width normal :foundry "PfEd" :family "Iosevka"))))
- '(company-scrollbar-bg ((t (:background "#458d4e9f51a5"))))
- '(company-scrollbar-fg ((t (:background "#39c6414f43d2"))))
+ '(default ((t (:inherit nil :extend nil :stipple nil :background "#2e3436" :foreground "#eeeeec" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 120 :width normal :foundry "UKWN" :family "Iosevka Term"))))
  '(company-tooltip ((t (:inherit default :background "#32b539533b87"))))
  '(company-tooltip-common ((t (:inherit font-lock-constant-face))))
+ '(company-tooltip-scrollbar-thumb ((t (:background "#39c6414f43d2"))))
+ '(company-tooltip-scrollbar-track ((t (:background "#458d4e9f51a5"))))
  '(company-tooltip-selection ((t (:inherit font-lock-function-name-face :background "navy"))))
  '(font-lock-comment-face ((t (:foreground "#73d216" :slant oblique))))
  '(font-lock-keyword-face ((t (:foreground "#b4fa70" :weight bold))))
