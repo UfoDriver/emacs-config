@@ -51,9 +51,6 @@
   (helm-posframe-enable))
 
 (use-package emacs
-  ;; For now only for python mode override (match/case support).
-  ;; https://emacs.stackexchange.com/questions/69291/how-can-i-make-python-mode-correctly-indent-pythons-match-statement/71402#71402
-  :load-path "standard-package-overrides"
   :config
   (global-set-key (kbd "M-u") 'upcase-dwim)
   (global-set-key (kbd "M-l") 'downcase-dwim)
