@@ -53,4 +53,14 @@
     (my:mark-test-with-tag (car pair) (cdr pair))))
 )
 
+(defun my:display-fold-marker (ov)
+  "Format text replacement for folding marker for overlay OV."
+  (when (eq 'code (overlay-get ov 'hs))
+    (overlay-put ov 'display
+                 (propertize
+                  (format "(···%d···)"
+                          (count-lines (overlay-start ov)
+                                       (overlay-end ov)))
+                  'face 'font-lock-type-face))))
+
 ;;; custom-functions.el ends here

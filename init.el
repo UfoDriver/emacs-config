@@ -1,6 +1,6 @@
 ;;; package --- Emacs init file
 ;;; Commentary:
-;;; my custom Emacs initialization file
+;;; Everyone should have his/her own init.el
 ;;; Code:
 (setq custom-file "~/.emacs.d/custom.el")
 (load "~/.emacs.d/custom.el")
@@ -22,25 +22,20 @@
 ;; GLOBAL SETTINGS
 ;; -----------------------------------------------------------------------------
 
-;; http://cachestocaches.com/2015/8/getting-started-use-package/
-;; https://github.com/jwiegley/use-package
-;; (eval-when-compile
-;;   ;;  Following line is not needed if use-package.el is in ~/.emacs.d
-;;   ;; (add-to-list 'load-path "<path where use-package is installed>")
-;;   ;; (package-activate 'use-package)
-;;   (require 'use-package))
-
 ;; -----------------------------------------------------------------------------
 ;; CUSTOM FUNCTIONS
 ;; -----------------------------------------------------------------------------
-
 (load (expand-file-name (concat user-emacs-directory "custom-functions")))
 
 ;; -----------------------------------------------------------------------------
 ;; PACKAGES
 ;; -----------------------------------------------------------------------------
 
-(use-package diminish :ensure t)
+(use-package diminish
+  :ensure t
+  :config
+  (diminish 'hs-minor-mode)
+  (diminish 'global-whitespace-mode))
 
 (use-package meson-mode
   :defer t)
@@ -171,17 +166,14 @@
   (my:setup-frame-name))
 
 (use-package helm
-  :diminish
+  :diminish t
   :bind
   (("M-x" . helm-M-x)
    ("M-y" . helm-show-kill-ring)
    ("C-x C-b" . helm-mini)
    ("C-x C-f" . helm-find-files))
   :init
-  (helm-mode 1)
-;  :config
-;  (setq helm-display-function 'my:helm-display-frame-center)
-)
+  (helm-mode 1))
 
 (use-package helm-projectile
   :config
@@ -203,6 +195,12 @@
 
 (use-package ligature
   ;; :load-path "path-to-ligature-repo"
+(use-package paredit
+  :defer t)
+
+(use-package fold-dwim
+  :defer t
+  :bind (("C-c <tab>" . fold-dwim-toggle)))
   :config
   ;; Enable the "www" ligature in every possible major mode
   ;; (ligature-set-ligatures 't '("www"))
