@@ -86,18 +86,6 @@
 (use-package helm-lsp
   :commands helm-lsp-workspace-symbol)
 
-;; (use-package dap-mode)
-
-;; Next form is copypaste and should be cleaned
-(use-package ccls
-  :defer t
-  :after projectile
-;  :ensure-system-package ccls
-  :custom
-  (ccls-args nil)
-  ;; (ccls-executable (executable-find "/home/alex/tmp/ccls/Release/ccls"))
-  )
-
 (use-package slime
   :defer t
   :init
@@ -126,7 +114,8 @@
   :diminish
   :config
   (global-company-mode)
-  (setq company-format-margin-function #'company-detect-icons-margin))
+  (company-quickhelp-mode))
+  ;; (setq company-format-margin-function #'company-detect-icons-margin))
 
 (use-package flycheck
   :defer t
@@ -178,38 +167,39 @@
 (use-package all-the-icons
   :if (display-graphic-p))
 
-(use-package ligature
-  ;; :load-path "path-to-ligature-repo"
 (use-package paredit
   :defer t)
 
 (use-package fold-dwim
   :defer t
   :bind (("C-c <tab>" . fold-dwim-toggle)))
+
+(use-package helpful
+  :defer nil
   :config
-  ;; Enable the "www" ligature in every possible major mode
-  ;; (ligature-set-ligatures 't '("www"))
-  ;; Enable traditional ligature support in eww-mode, if the
-  ;; `variable-pitch' face supports it
-  ;; (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
-  ;; Enable all Cascadia Code ligatures in programming modes
-  (ligature-set-ligatures 'prog-mode
-                          '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
-                            ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
-                            "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
-                            "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
-                            "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
-                            "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
-                            "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
-                            "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
-                            ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
-                            "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
-                            "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
-                            "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
-                            "\\\\" "://"))
-  ;; Enables ligature checks globally in all buffers. You can also do it
-  ;; per mode with `ligature-mode'.
-  (global-ligature-mode t))
+  (global-set-key (kbd "C-h f") #'helpful-callable)
+  (global-set-key (kbd "C-h v") #'helpful-variable)
+  (global-set-key (kbd "C-h k") #'helpful-key)
+  (global-set-key (kbd "C-h x") #'helpful-command))
+
+(use-package pixel-scroll
+  :bind
+  ([remap scroll-up-command]   . pixel-scroll-interpolate-down)
+  ([remap scroll-down-command] . pixel-scroll-interpolate-up)
+  :custom
+  (pixel-scroll-precision-interpolate-page t)
+  :init
+  (pixel-scroll-precision-mode 1))
+
+(use-package restclient
+  :defer t
+  :requires restclient-jq)
+
+(use-package windmove
+  :bind (("C-c <up>" . #'windmove-up)
+         ("C-c <right>" . #'windmove-right)
+         ("C-c <down>" . #'windmove-down)
+         ("C-c <left>" . #'windmove-left)))
 
 ;; -----------------------------------------------------------------------------
 ;; ENABLED DISABLED BY DEFAULT COMMANDS
@@ -235,7 +225,58 @@
 ;; TO SORT OUT
 ;; -----------------------------------------------------------------------------
 
-;; Yay, nothing is here
+(use-package dap-mode
+  :config
+  (setq dap-python-debugger 'debugpy)
+  :init
+  (require 'dap-cpptools)
+  (dap-register-debug-template
+   "Rust::GDB Run Configuration"
+   (list :type "gdb"
+         :request "launch"
+         :name "GDB::Run"
+         :gdbpath "rust-gdb"
+         :target nil
+         :cwd nil))
+  (require 'dap-python)
+  )
+
+;; Next form is copypaste and should be cleaned
+(use-package ccls
+  :defer t
+  :after projectile
+;  :ensure-system-package ccls
+  ;; :custom
+  ;; (ccls-args nil)
+  ;; (ccls-executable (executable-find "/home/alex/tmp/ccls/Release/ccls"))
+  )
+
+;; (use-package ligature
+;;   ;; :load-path "path-to-ligature-repo"
+;;   :config
+;;   ;; Enable the "www" ligature in every possible major mode
+;;   ;; (ligature-set-ligatures 't '("www"))
+;;   ;; Enable traditional ligature support in eww-mode, if the
+;;   ;; `variable-pitch' face supports it
+;;   ;; (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
+;;   ;; Enable all Cascadia Code ligatures in programming modes
+;;   (ligature-set-ligatures 'prog-mode
+;;                           '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
+;;                             ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
+;;                             "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
+;;                             "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
+;;                             "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
+;;                             "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
+;;                             "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
+;;                             "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
+;;                             ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
+;;                             "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
+;;                             "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
+;;                             "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
+;;                             "\\\\" "://"))
+;;   ;; Enables ligature checks globally in all buffers. You can also do it
+;;   ;; per mode with `ligature-mode'.
+;;   (global-ligature-mode t))
 
 ;; -----------------------------------------------------------------------------
 ;; LOCAL INITIALIZATION
@@ -247,8 +288,6 @@
 (if (file-exists-p "~/.emacs.d/local-init.el")
     (load-file "~/.emacs.d/local-init.el")
   (message "No local-init.el found"))
-
-;; (my:setup-frame-name)
 
 (require 'color)
 
