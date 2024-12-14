@@ -243,6 +243,8 @@
 (add-hook 'prog-mode-hook '(lambda ()
   (local-set-key (kbd "RET") 'newline-and-indent)))
 
+(keymap-global-set "M-o" 'my:other-window-mru)
+
 ;; -----------------------------------------------------------------------------
 ;; TO SORT OUT
 ;; -----------------------------------------------------------------------------

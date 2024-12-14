@@ -63,4 +63,13 @@
                                        (overlay-end ov)))
                   'face 'font-lock-type-face))))
 
+;; https://karthinks.com/software/emacs-window-management-almanac/
+(defun my:other-window-mru ()
+  "Select the most recently used window on this frame."
+  (interactive)
+  (when-let ((mru-window
+              (get-mru-window
+               nil nil 'not-this-one-dummy)))
+    (select-window mru-window)))
+
 ;;; custom-functions.el ends here
