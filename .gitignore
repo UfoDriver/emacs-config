@@ -20,3 +20,9 @@ request/
 session.*
 tramp
 network-security.data
+cache/
+eln-cache/
+newsticker/
+projects
+transient/
+tree-sitter/

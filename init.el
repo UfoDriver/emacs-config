@@ -2,21 +2,10 @@
 ;;; Commentary:
 ;;; Everyone should have his/her own init.el
 ;;; Code:
-(setq custom-file "~/.emacs.d/custom.el")
 (load "~/.emacs.d/custom.el")
-
-;; (add-to-list 'load-path "~/.emacs.d/site-lisp/")
-
+(require 'compat)
 (require 'package)
-(setq package-enable-at-startup nil)
 (package-initialize)
-
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-
-(require 'use-package)
-;; (setq use-package-always-ensure t)
 
 ;; -----------------------------------------------------------------------------
 ;; GLOBAL SETTINGS
@@ -56,15 +45,11 @@
   (defun pulse-line (&rest _)
     "Pulse the current line."
     (pulse-momentary-highlight-one-line (point)))
-  (dolist (command '(scroll-up-command scroll-down-command
-                                       recenter-top-bottom other-window))
+  (dolist (command '(scroll-up-command scroll-down-command recenter-top-bottom other-window))
     (advice-add command :after #'pulse-line))
 
   (define-advice kill-ring-save (:before (start end &rest rest))
     (pulse-momentary-highlight-region start end)))
-
-(use-package whitespace
-  :diminish)
 
 (use-package asm-mode
   :defer t
@@ -82,7 +67,7 @@
 (defun my:lsp-hook ()
   "Check if we want to start LSP for this mode."
   (if (member major-mode major-modes-without-lsp)
-      (message "LSP is disabled for %s, check major-modes-without-lsp varialbe" major-mode)
+      (message "LSP is disabled for %s, check `major-modes-without-lsp` variable" major-mode)
     (lsp)))
 
 (use-package lsp-mode
@@ -118,7 +103,7 @@
   :init
   (setq-default inferior-lisp-program "/usr/bin/sbcl")
   :config
-  (load (expand-file-name "~/.local/lib/quicklisp/slime-helper.el"))
+  (load (expand-file-name "~/.local/share/common-lisp/slime-helper.el"))
   (slime-setup '(slime-company slime-repl inferior-slime slime-fancy slime-presentations
                                slime-presentation-streams helm-slime))
   (let ((hyperspec-dir (expand-file-name (concat user-emacs-directory "/HyperSpec/"))))
@@ -240,8 +225,9 @@
 ;; -----------------------------------------------------------------------------
 
 ;; Enter for newline-and-indent in programming modes
-(add-hook 'prog-mode-hook '(lambda ()
-  (local-set-key (kbd "RET") 'newline-and-indent)))
+(add-hook 'prog-mode-hook #'(lambda ()
+  (local-set-key (kbd "RET") 'newline-and-indent)
+  (hs-minor-mode t)))
 
 (keymap-global-set "M-o" 'my:other-window-mru)
 

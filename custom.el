@@ -13,11 +13,14 @@
  '(column-number-mode t)
  '(company-format-margin-function 'company-detect-icons-margin)
  '(company-minimum-prefix-length 1)
+ '(company-tooltip-align-annotations t)
  '(company-tooltip-idle-delay 0)
  '(css-indent-offset 2)
  '(custom-enabled-themes '(tango-dark))
+ '(custom-file "~/.emacs.d/custom.el")
  '(custom-safe-themes
    '("3448e3f5d01b39ce75962328a5310438e4a19e76e4b691c21c8e04ca318a5f62" default))
+ '(dap-auto-configure-mode t)
  '(delete-selection-mode t)
  '(ecb-options-version "2.40")
  '(electric-pair-mode t)
@@ -37,6 +40,7 @@
  '(helm-gtags-suggested-key-mapping t)
  '(helm-gtags-use-input-at-cursor t)
  '(helm-visible-mark-prefix "")
+ '(hs-set-up-overlay 'my:display-fold-marker)
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(jedi:complete-on-dot t)
@@ -58,8 +62,9 @@
      ("original" . "http://tromey.com/elpa/")
      ("gnu" . "https://elpa.gnu.org/packages/")
      ("org" . "https://orgmode.org/elpa/")))
+ '(package-enable-at-startup nil)
  '(package-selected-packages
-   '(magit ligature lsp-treemacs all-the-icons flycheck company-restclient restclient restclient-helm helm-slime slime slime-company inspector erlang web-mode systemd company helm-posframe python-pytest spice-mode lua-mode geiser-guile helpful helm-make helm-dash dap-mode org-babel-eval-in-repl meson-mode elisp-format helm-lsp which-key diminish typescript-mode vue-mode svg yasnippet-snippets docker-tramp hy-mode nasm-mode flycheck-mypy queue cider fsm jabber jabber-otr helm-unicode iedit use-package lsp-ui ccls scad-mode geiser ediprolog ctags liso-theme json-navigator company-ansible flycheck-pycheckers json-mode elisp-slime-nav notify drag-stuff helm-gtags rpm-spec-mode company-qml qml-mode graphviz-dot-mode stickyfunc-enhance dockerfile-mode cython-mode feature-mode helm-emmet helm-package yaml-mode xmlgen scss-mode request-deferred python-pep8 pymacs pyflakes pycomplete multi-web-mode marmalade markdown-mode+ jsx-mode json-rpc jinja2-mode helm-projectile helm-css-scss helm-ag fuzzy fabric emmet-mode))
+   '(treesit-auto company-quickhelp restclient-jq go-mode pdf-tools docker-compose-mode sass-mode csharp-mode dotnet fold-dwim paredit rust-mode magit ligature lsp-treemacs all-the-icons flycheck company-restclient restclient restclient-helm helm-slime slime slime-company inspector erlang web-mode systemd company helm-posframe python-pytest spice-mode lua-mode geiser-guile helpful helm-make helm-dash dap-mode org-babel-eval-in-repl meson-mode elisp-format helm-lsp which-key diminish typescript-mode vue-mode svg yasnippet-snippets docker-tramp hy-mode nasm-mode flycheck-mypy queue cider fsm jabber jabber-otr helm-unicode iedit use-package lsp-ui ccls scad-mode geiser ediprolog ctags liso-theme json-navigator company-ansible flycheck-pycheckers json-mode elisp-slime-nav notify drag-stuff helm-gtags rpm-spec-mode company-qml qml-mode graphviz-dot-mode stickyfunc-enhance dockerfile-mode cython-mode feature-mode helm-emmet helm-package yaml-mode xmlgen scss-mode request-deferred python-pep8 pymacs pyflakes pycomplete multi-web-mode marmalade markdown-mode+ jsx-mode json-rpc jinja2-mode helm-projectile helm-css-scss helm-ag fuzzy fabric emmet-mode))
  '(projectile-completion-system 'helm)
  '(projectile-globally-ignored-directories
    '(".idea" ".ensime_cache" ".eunit" ".git" ".hg" ".fslckout" "_FOSSIL_" ".bzr" "_darcs" ".tox" ".svn" ".stack-work" "env" ".env" ".mypy_cache"))
@@ -78,7 +83,10 @@
  '(typescript-indent-level 2)
  '(uniquify-buffer-name-style 'post-forward nil (uniquify))
  '(uniquify-separator ":")
+ '(use-package-always-defer t)
+ '(use-package-always-ensure t)
  '(use-package-verbose t)
+ '(warning-suppress-log-types '((comp)))
  '(web-mode-code-indent-offset 2)
  '(web-mode-css-indent-offset 2)
  '(web-mode-markup-indent-offset 2)
@@ -91,8 +99,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :extend nil :stipple nil :background "#2e3436" :foreground "#eeeeec" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 120 :width normal :foundry "UKWN" :family "Iosevka Term"))))
- '(company-tooltip ((t (:inherit default :background "#32b539533b87"))))
+ '(default ((t (:inherit nil :extend nil :stipple nil :background "#2e3436" :foreground "#eeeeec" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight regular :height 140 :width normal :foundry "UKWN" :family "Iosevka Term"))))
+ '(company-tooltip ((t (:background "#292a2b" :inherit default))))
  '(company-tooltip-common ((t (:inherit font-lock-constant-face))))
  '(company-tooltip-scrollbar-thumb ((t (:background "#39c6414f43d2"))))
  '(company-tooltip-scrollbar-track ((t (:background "#458d4e9f51a5"))))
@@ -103,6 +111,7 @@
  '(magit-diff-add ((t (:inherit nil :foreground "green"))))
  '(magit-diff-del ((t (:inherit diff-removed :foreground "red"))))
  '(magit-item-highlight ((t (:inherit highlight-))))
+ '(mmm-default-submode-face ((t nil)))
  '(mode-line ((t (:background "#555753" :foreground "#eeeeec" :box nil))))
  '(mode-line-inactive ((t (:background "#2e3436" :foreground "#eeeeec" :box nil))))
  '(whitespace-empty ((t (:background "DarkGoldenrod4" :foreground "firebrick"))))
