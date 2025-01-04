@@ -14,7 +14,7 @@
 ;; -----------------------------------------------------------------------------
 ;; CUSTOM FUNCTIONS
 ;; -----------------------------------------------------------------------------
-(load (expand-file-name (concat user-emacs-directory "custom-functions")))
+(load (expand-file-name "custom-functions" user-emacs-directory))
 
 ;; -----------------------------------------------------------------------------
 ;; PACKAGES
