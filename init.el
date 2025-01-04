@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;;; Everyone should have his/her own init.el
 ;;; Code:
-(load "~/.emacs.d/custom.el")
+(load (expand-file-name "custom.el" user-emacs-directory))
 (require 'compat)
 (require 'package)
 (package-initialize)
@@ -38,8 +38,6 @@
   :config
   (global-set-key (kbd "M-u") 'upcase-dwim)
   (global-set-key (kbd "M-l") 'downcase-dwim)
-  (global-unset-key (kbd "C-x C-u"))
-  (global-unset-key (kbd "C-x C-l"))
 
   ; https://karthinks.com/software/batteries-included-with-emacs/
   (defun pulse-line (&rest _)
@@ -134,18 +132,19 @@
 (use-package projectile
   :bind-keymap
   ("C-c p" . projectile-command-map)
-  :bind ((:map projectile-command-map)
-         ("s s" . helm-projectile-ag))
+  :bind
+  (:map projectile-command-map)
+  ("s s" . helm-projectile-ag)
   :config
   (my:setup-frame-name))
 
 (use-package helm
-  :diminish t
+  :diminish nil
   :bind
-  (("M-x" . helm-M-x)
-   ("M-y" . helm-show-kill-ring)
-   ("C-x C-b" . helm-mini)
-   ("C-x C-f" . helm-find-files))
+  ("M-x" . helm-M-x)
+  ("M-y" . helm-show-kill-ring)
+  ("C-x C-b" . helm-mini)
+  ("C-x C-f" . helm-find-files)
   :init
   (helm-mode 1))
 
@@ -172,34 +171,33 @@
 
 (use-package fold-dwim
   :defer t
-  :bind (("C-c <tab>" . fold-dwim-toggle)))
+  :bind
+  ("C-c <tab>" . fold-dwim-toggle))
 
 (use-package helpful
   :defer nil
-  :config
-  (global-set-key (kbd "C-h f") #'helpful-callable)
-  (global-set-key (kbd "C-h v") #'helpful-variable)
-  (global-set-key (kbd "C-h k") #'helpful-key)
-  (global-set-key (kbd "C-h x") #'helpful-command))
+  :bind
+  ([remap describe-function] . helpful-callable)
+  ([remap describe-variable] . helpful-variable)
+  ([remap describe-key]      . helpful-key)
+  ([remap describe-command]  . helpful-command))
 
 (use-package pixel-scroll
+  :ensure nil
   :bind
   ([remap scroll-up-command]   . pixel-scroll-interpolate-down)
-  ([remap scroll-down-command] . pixel-scroll-interpolate-up)
-  :custom
-  (pixel-scroll-precision-interpolate-page t)
-  :init
-  (pixel-scroll-precision-mode 1))
+  ([remap scroll-down-command] . pixel-scroll-interpolate-up))
 
 (use-package restclient
   :defer t
   :requires restclient-jq)
 
 (use-package windmove
-  :bind (("C-c <up>" . #'windmove-up)
-         ("C-c <right>" . #'windmove-right)
-         ("C-c <down>" . #'windmove-down)
-         ("C-c <left>" . #'windmove-left)))
+  :bind
+  ("C-c <up>"    . #'windmove-up)
+  ("C-c <right>" . #'windmove-right)
+  ("C-c <down>"  . #'windmove-down)
+  ("C-c <left>"  . #'windmove-left))
 
 ;; -----------------------------------------------------------------------------
 ;; ENABLED DISABLED BY DEFAULT COMMANDS
@@ -207,8 +205,6 @@
 
 (put 'narrow-to-region 'disabled nil)
 (put 'dired-find-alternate-file 'disabled nil)
-(put 'upcase-region 'disabled nil)
-(put 'downcase-region 'disabled nil)
 
 ;; -----------------------------------------------------------------------------
 ;; CUSTOM KEYBINDINGS
@@ -217,7 +213,8 @@
 ;; Enter for newline-and-indent in programming modes
 (add-hook 'prog-mode-hook #'(lambda ()
   (local-set-key (kbd "RET") 'newline-and-indent)
-  (hs-minor-mode t)))
+  ;; (hs-minor-mode t)
+  ))
 
 (keymap-global-set "M-o" 'my:other-window-mru)
 
@@ -255,11 +252,11 @@
 ;; LOCAL INITIALIZATION
 ;; -----------------------------------------------------------------------------
 
-(load-file "~/.emacs.d/icons-in-terminal.el")
-(load-file "~/.emacs.d/icons-in-terminal-local.el")
+(load-file (expand-file-name "icons-in-terminal.el" user-emacs-directory))
+(load-file (expand-file-name "icons-in-terminal-local.el" user-emacs-directory))
 
-(if (file-exists-p "~/.emacs.d/local-init.el")
-    (load-file "~/.emacs.d/local-init.el")
+(if (file-exists-p (expand-file-name "local-init.el" user-emacs-directory))
+    (load-file (expand-file-name "local-init.el" user-emacs-directory))
   (message "No local-init.el found"))
 
 (require 'color)
