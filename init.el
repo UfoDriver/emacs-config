@@ -85,6 +85,8 @@
   :commands helm-lsp-workspace-symbol)
 
 (use-package slime
+  :if
+  (or (executable-find "sbcl") (executable-find "ecl") (executable-find "clisp"))
   :defer t
   :init
   (setq-default inferior-lisp-program "/usr/bin/sbcl")
