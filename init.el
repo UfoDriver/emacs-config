@@ -31,6 +31,7 @@
 
 (use-package helm-posframe
   :defer t
+  :if (display-graphic-p)
   :init
   (helm-posframe-enable))
 
@@ -185,10 +186,13 @@
   ([remap describe-command]  . helpful-command))
 
 (use-package pixel-scroll
-  :ensure nil
+  :if (display-graphic-p)
   :bind
   ([remap scroll-up-command]   . pixel-scroll-interpolate-down)
-  ([remap scroll-down-command] . pixel-scroll-interpolate-up))
+  ([remap scroll-down-command] . pixel-scroll-interpolate-up)
+  :custom
+  (pixel-scroll-precision-interpolate-page)
+  (pixel-scroll-precision-mode 1))
 
 (use-package restclient
   :defer t
@@ -200,6 +204,11 @@
   ("C-c <right>" . #'windmove-right)
   ("C-c <down>"  . #'windmove-down)
   ("C-c <left>"  . #'windmove-left))
+
+(use-package web-mode
+  :ensure t
+  :mode
+  (("\\.vue\\'" . web-mode)))
 
 ;; -----------------------------------------------------------------------------
 ;; ENABLED DISABLED BY DEFAULT COMMANDS
