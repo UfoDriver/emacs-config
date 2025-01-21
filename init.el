@@ -186,7 +186,7 @@
   ([remap describe-command]  . helpful-command))
 
 (use-package pixel-scroll
-  :if (display-graphic-p)
+  :if (and (display-graphic-p) (eq system-type 'gnu/linux))
   :bind
   ([remap scroll-up-command]   . pixel-scroll-interpolate-down)
   ([remap scroll-down-command] . pixel-scroll-interpolate-up)
