@@ -3,7 +3,7 @@
 ;;; Everyone should have his/her own init.el
 ;;; Code:
 (load (expand-file-name "custom.el" user-emacs-directory))
-(require 'compat)
+;;(require 'compat)
 (require 'package)
 (package-initialize)
 
@@ -191,7 +191,6 @@
   ([remap scroll-up-command]   . pixel-scroll-interpolate-down)
   ([remap scroll-down-command] . pixel-scroll-interpolate-up)
   :custom
-  (pixel-scroll-precision-interpolate-page)
   (pixel-scroll-precision-mode 1))
 
 (use-package restclient
