@@ -40,6 +40,13 @@
   (global-set-key (kbd "M-u") 'upcase-dwim)
   (global-set-key (kbd "M-l") 'downcase-dwim)
 
+  (when (display-graphic-p)
+    (require 'pixel-scroll)
+    (pixel-scroll-precision-mode t)
+    (bind-keys :package pixel-scroll-precision-mode
+               ([remap scroll-up-command]   . #'pixel-scroll-interpolate-down)
+               ([remap scroll-down-command] . #'pixel-scroll-interpolate-up)))
+
   ; https://karthinks.com/software/batteries-included-with-emacs/
   (defun pulse-line (&rest _)
     "Pulse the current line."
@@ -100,7 +107,7 @@
         (setq-default common-lisp-hyperspec-root hyperspec-dir))))
 
 (use-package drag-stuff
-  :diminish
+  :diminish t
   :config
   (drag-stuff-global-mode t)
   (drag-stuff-define-keys)
@@ -184,16 +191,6 @@
   ([remap describe-variable] . helpful-variable)
   ([remap describe-key]      . helpful-key)
   ([remap describe-command]  . helpful-command))
-
-(use-package pixel-scroll
-  :if (and (display-graphic-p) (eq system-type 'gnu/linux))
-  :bind
-  ([remap scroll-up-command]   . pixel-scroll-interpolate-down)
-  ([remap scroll-down-command] . pixel-scroll-interpolate-up)
-  :custom
-  (pixel-scroll-interpolate-page t)
-  :init
-  (pixel-scroll-precision-mode 1))
 
 (use-package restclient
   :defer t
