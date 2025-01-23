@@ -17,7 +17,7 @@
  '(company-tooltip-idle-delay 0)
  '(css-indent-offset 2)
  '(custom-enabled-themes '(tango-dark))
- '(custom-file "~/.emacs.d/custom.el")
+ `(custom-file ,(expand-file-name "custom.el" user-emacs-directory))
  '(custom-safe-themes
    '("3448e3f5d01b39ce75962328a5310438e4a19e76e4b691c21c8e04ca318a5f62" default))
  '(dap-auto-configure-mode t)
@@ -94,6 +94,8 @@
  '(web-mode-enable-current-column-highlight t)
  '(web-mode-enable-current-element-highlight t)
  '(web-mode-markup-indent-offset 2)
+ '(web-mode-script-padding 2)
+ '(web-mode-style-padding 2)
  '(whitespace-display-mappings '((space-mark 32) (newline-mark 13) (tab-mark 9)))
  '(whitespace-line-column 100)
  '(whitespace-style
