@@ -55,7 +55,8 @@
     (advice-add command :after #'pulse-line))
 
   (define-advice kill-ring-save (:before (start end &rest rest))
-    (pulse-momentary-highlight-region start end)))
+    (pulse-momentary-highlight-region start end))
+  (global-display-line-numbers-mode))
 
 (use-package asm-mode
   :defer t
@@ -122,7 +123,8 @@
   :diminish
   :config
   (global-company-mode)
-  (company-quickhelp-mode))
+  ;;(company-quickhelp-mode)
+  )
   ;; (setq company-format-margin-function #'company-detect-icons-margin))
 
 (use-package flycheck
