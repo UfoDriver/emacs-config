@@ -24,7 +24,9 @@
   :ensure t
   :config
   (diminish 'hs-minor-mode)
-  (diminish 'global-whitespace-mode))
+  (diminish 'global-whitespace-mode)
+  (diminish 'eldoc-mode)
+  (diminish 'auto-revert-mode))
 
 (use-package meson-mode
   :defer t)
@@ -56,20 +58,18 @@
 
   (define-advice kill-ring-save (:before (start end &rest rest))
     (pulse-momentary-highlight-region start end))
-  (global-display-line-numbers-mode))
+  (global-display-line-numbers-mode)
+  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . typescript-mode)))
 
 (use-package asm-mode
   :defer t
   :hook
-  (asm-mode .
-            (lambda ()
-              (setq-local
-               indent-tabs-mode t
-               tab-width 10))))
-
+  (asm-mode . (lambda ()
+                (setq-local
+                 indent-tabs-mode t
+                 tab-width 10))))
 
 ;; https://www.reddit.com/r/emacs/comments/audffp/tip_how_to_use_a_stable_and_fast_environment_to/
-
 (defvar major-modes-without-lsp '(lisp-mode emacs-lisp-mode scheme-mode))
 (defun my:lsp-hook ()
   "Check if we want to start LSP for this mode."
@@ -78,12 +78,11 @@
     (lsp)))
 
 (use-package lsp-mode
+  :defer t
   :hook (prog-mode . my:lsp-hook)
   :bind-keymap ("C-c l" . lsp-command-map)
   :config
   (setq read-process-output-max 8192)
-  :bind-keymap
-  ("C-c l" . lsp-command-map)
   :hook
   (lsp-mode . lsp-enable-which-key-integration))
 
@@ -108,7 +107,7 @@
         (setq-default common-lisp-hyperspec-root hyperspec-dir))))
 
 (use-package drag-stuff
-  :diminish t
+  :diminish nil
   :config
   (drag-stuff-global-mode t)
   (drag-stuff-define-keys)
@@ -120,7 +119,7 @@
   (setq-default magit-last-seen-setup-instructions "1.4.0"))
 
 (use-package company
-  :diminish
+  :diminish nil
   :config
   (global-company-mode)
   ;;(company-quickhelp-mode)
@@ -142,6 +141,7 @@
   :mode ("\\.hy\\'" . hy-mode))
 
 (use-package projectile
+  :defer t
   :bind-keymap
   ("C-c p" . projectile-command-map)
   :bind
@@ -151,6 +151,7 @@
   (my:setup-frame-name))
 
 (use-package helm
+  :defer t
   :diminish nil
   :bind
   ("M-x" . helm-M-x)
@@ -161,6 +162,7 @@
   (helm-mode 1))
 
 (use-package helm-projectile
+  :defer t
   :config
   (helm-projectile-on))
 
@@ -207,8 +209,21 @@
 
 (use-package web-mode
   :ensure t
+  :init
+  (setf (alist-get 'web-mode lsp--formatting-indent-alist) 'web-mode-code-indent-offset)
   :mode
   (("\\.vue\\'" . web-mode)))
+
+(use-package treemacs
+  :defer t
+  :config
+  (treemacs-resize-icons 16))
+
+(use-package diff-hl
+  :hook
+  ;; Somehow shortcuts don't work here because of "diff-hl.el faield to define function diff-hl"
+  ((prog-mode . diff-hl-mode)
+   (vc-dir-mode . diff-hl-mode)))
 
 ;; -----------------------------------------------------------------------------
 ;; ENABLED DISABLED BY DEFAULT COMMANDS
@@ -263,8 +278,8 @@
 ;; LOCAL INITIALIZATION
 ;; -----------------------------------------------------------------------------
 
-(load-file (expand-file-name "icons-in-terminal.el" user-emacs-directory))
-(load-file (expand-file-name "icons-in-terminal-local.el" user-emacs-directory))
+;; (load-file (expand-file-name "icons-in-terminal.el" user-emacs-directory))
+;; (load-file (expand-file-name "icons-in-terminal-local.el" user-emacs-directory))
 
 (if (file-exists-p (expand-file-name "local-init.el" user-emacs-directory))
     (load-file (expand-file-name "local-init.el" user-emacs-directory))
@@ -279,8 +294,5 @@
    `(company-scrollbar-fg ((t (:background ,(color-lighten-name bg 5)))))
    `(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
    `(company-tooltip-common ((t (:inherit font-lock-constant-face))))))
-
-
-(add-to-list 'auto-mode-alist '("\\.tsx\\'" . typescript-mode))
 
 ;;; init.el ends here

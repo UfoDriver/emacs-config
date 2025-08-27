@@ -47,6 +47,7 @@
  '(js-indent-level 2)
  '(js-switch-indent-offset 2)
  '(js2-basic-offset 2)
+ '(lsp-enable-on-type-formatting nil)
  '(lsp-enable-snippet nil)
  '(lsp-pylsp-server-command '("pylsp" "-v"))
  '(magit-push-always-verify nil)
@@ -64,17 +65,37 @@
      ("org" . "https://orgmode.org/elpa/")))
  '(package-enable-at-startup nil)
  '(package-selected-packages
-   '(treemacs-projectile pixel-scroll treesit-auto company-quickhelp restclient-jq go-mode pdf-tools docker-compose-mode sass-mode csharp-mode dotnet fold-dwim paredit rust-mode magit lsp-treemacs all-the-icons flycheck company-restclient restclient restclient-helm helm-slime slime slime-company inspector erlang web-mode systemd company helm-posframe python-pytest spice-mode lua-mode geiser-guile helpful helm-make helm-dash dap-mode org-babel-eval-in-repl meson-mode elisp-format helm-lsp which-key diminish typescript-mode svg yasnippet-snippets docker-tramp hy-mode nasm-mode flycheck-mypy queue cider fsm jabber jabber-otr helm-unicode iedit use-package lsp-ui ccls scad-mode geiser ediprolog ctags liso-theme json-navigator company-ansible flycheck-pycheckers json-mode elisp-slime-nav notify drag-stuff helm-gtags rpm-spec-mode company-qml qml-mode graphviz-dot-mode stickyfunc-enhance dockerfile-mode cython-mode feature-mode helm-emmet helm-package yaml-mode xmlgen scss-mode request-deferred python-pep8 pymacs pyflakes pycomplete multi-web-mode marmalade markdown-mode+ jsx-mode json-rpc jinja2-mode helm-projectile helm-css-scss helm-ag fuzzy fabric emmet-mode))
+   '(all-the-icons ccls cider company company-ansible company-qml company-quickhelp
+                   company-restclient csharp-mode ctags cython-mode dap-mode
+                   diff-hl diminish docker docker-compose-mode docker-tramp
+                   dockerfile-mode dotnet drag-stuff ediprolog elisp-format
+                   elisp-slime-nav emmet-mode erlang fabric feature-mode
+                   flycheck flycheck-mypy flycheck-pycheckers fold-dwim fsm
+                   fuzzy geiser geiser-guile go-mode graphviz-dot-mode helm-ag
+                   helm-css-scss helm-dash helm-emmet helm-gtags helm-lsp
+                   helm-make helm-package helm-posframe helm-projectile
+                   helm-slime helm-unicode helpful hy-mode iedit inspector
+                   jabber jabber-otr jinja2-mode json-mode json-navigator
+                   json-rpc jsx-mode kubernetes liso-theme lsp-treemacs lsp-ui
+                   lua-mode magit markdown-mode+ marmalade meson-mode
+                   multi-web-mode nasm-mode notify org-babel-eval-in-repl
+                   paredit pdf-tools pixel-scroll pycomplete pyflakes pymacs
+                   python-pep8 python-pytest qml-mode queue request-deferred
+                   restclient restclient-helm restclient-jq rpm-spec-mode
+                   rust-mode sass-mode scad-mode scss-mode slime slime-company
+                   spice-mode stickyfunc-enhance svg systemd treemacs-projectile
+                   treesit-auto typescript-mode use-package web-mode which-key
+                   xmlgen yaml-mode yasnippet-snippets))
  '(pixel-scroll-precision-interpolate-page t)
  '(pixel-scroll-precision-mode t)
  '(projectile-completion-system 'helm)
  '(projectile-globally-ignored-directories
-   '(".idea" ".ensime_cache" ".eunit" ".git" ".hg" ".fslckout" "_FOSSIL_" ".bzr" "_darcs" ".tox" ".svn" ".stack-work" "env" ".env" ".mypy_cache"))
+   '(".idea" ".ensime_cache" ".eunit" ".git" ".hg" ".fslckout" "_FOSSIL_" ".bzr"
+     "_darcs" ".tox" ".svn" ".stack-work" "env" ".env" ".mypy_cache"))
  '(projectile-project-root-files-top-down-recurring '("compile_commands.json" ".ccls" ".svn" "CVS" "Makefile") nil nil "Customized with use-package ccls")
  '(projectile-switch-project-action 'helm-projectile-find-file)
  '(safe-local-variable-values
-   '((whitespace-line-column . 120)
-     (whitespace-line-column . 100)))
+   '((whitespace-line-column . 120) (whitespace-line-column . 100)))
  '(scheme-program-name "guile2.2")
  '(scroll-bar-mode nil)
  '(scroll-step 1)
@@ -99,7 +120,8 @@
  '(whitespace-display-mappings '((space-mark 32) (newline-mark 13) (tab-mark 9)))
  '(whitespace-line-column 100)
  '(whitespace-style
-   '(face trailing tabs spaces lines-tail newline empty indentation space-after-tab space-before-tab space-mark tab-mark newline-mark)))
+   '(face trailing tabs spaces lines-tail newline empty indentation space-after-tab
+          space-before-tab space-mark tab-mark newline-mark)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
