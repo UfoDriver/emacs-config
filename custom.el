@@ -33,6 +33,8 @@
  '(geiser-guile-binary "/usr/bin/guile3.0")
  '(global-company-mode t)
  '(global-whitespace-mode t)
+ '(helm-display-buffer-height 40)
+ '(helm-display-buffer-width 120)
  '(helm-gtags-auto-update t)
  '(helm-gtags-ignore-case t)
  '(helm-gtags-prefix-key "\3-cg")
@@ -47,9 +49,14 @@
  '(js-indent-level 2)
  '(js-switch-indent-offset 2)
  '(js2-basic-offset 2)
+ '(lsp-clients-typescript-plugins
+   [(:name "@vue/typescript-plugin" :location
+           "/home/alex/.config/emacs/.cache/lsp/npm/@vue/language-server"
+           :languages ["vue"])])
  '(lsp-enable-on-type-formatting nil)
  '(lsp-enable-snippet nil)
  '(lsp-pylsp-server-command '("pylsp" "-v"))
+ '(lsp-volar-as-add-on t)
  '(magit-push-always-verify nil)
  '(markdown-command "markdown2 -x tables -x smarty-pants -x strike")
  '(markdown-command-needs-filename t)
@@ -65,27 +72,16 @@
      ("org" . "https://orgmode.org/elpa/")))
  '(package-enable-at-startup nil)
  '(package-selected-packages
-   '(all-the-icons ccls cider company company-ansible company-qml company-quickhelp
-                   company-restclient csharp-mode ctags cython-mode dap-mode
-                   diff-hl diminish docker docker-compose-mode docker-tramp
-                   dockerfile-mode dotnet drag-stuff ediprolog elisp-format
-                   elisp-slime-nav emmet-mode erlang fabric feature-mode
-                   flycheck flycheck-mypy flycheck-pycheckers fold-dwim fsm
-                   fuzzy geiser geiser-guile go-mode graphviz-dot-mode helm-ag
-                   helm-css-scss helm-dash helm-emmet helm-gtags helm-lsp
-                   helm-make helm-package helm-posframe helm-projectile
-                   helm-slime helm-unicode helpful hy-mode iedit inspector
-                   jabber jabber-otr jinja2-mode json-mode json-navigator
-                   json-rpc jsx-mode kubernetes liso-theme lsp-treemacs lsp-ui
-                   lua-mode magit markdown-mode+ marmalade meson-mode
-                   multi-web-mode nasm-mode notify org-babel-eval-in-repl
-                   paredit pdf-tools pixel-scroll pycomplete pyflakes pymacs
-                   python-pep8 python-pytest qml-mode queue request-deferred
-                   restclient restclient-helm restclient-jq rpm-spec-mode
-                   rust-mode sass-mode scad-mode scss-mode slime slime-company
-                   spice-mode stickyfunc-enhance svg systemd treemacs-projectile
-                   treesit-auto typescript-mode use-package web-mode which-key
-                   xmlgen yaml-mode yasnippet-snippets))
+   '(all-the-icons ccls company-quickhelp company-restclient csharp-mode diff-hl
+                   diminish docker docker-compose-mode dockerfile-mode dotnet
+                   drag-stuff elisp-format erlang feature-mode flycheck
+                   fold-dwim geiser-guile helm-ag helm-lsp helm-make
+                   helm-posframe helm-projectile helm-slime helpful hy-mode
+                   jinja2-mode kubernetes lsp-ui magit meson-mode paredit
+                   pdf-tools poke poke-mode python-pytest restclient-helm
+                   restclient-jq rust-mode sass-mode slime-company spice-mode
+                   treemacs-all-the-icons treemacs-projectile treesit-auto
+                   typescript-mode use-package web-mode which-key))
  '(pixel-scroll-precision-interpolate-page t)
  '(pixel-scroll-precision-mode t)
  '(projectile-completion-system 'helm)
@@ -93,6 +89,7 @@
    '(".idea" ".ensime_cache" ".eunit" ".git" ".hg" ".fslckout" "_FOSSIL_" ".bzr"
      "_darcs" ".tox" ".svn" ".stack-work" "env" ".env" ".mypy_cache"))
  '(projectile-project-root-files-top-down-recurring '("compile_commands.json" ".ccls" ".svn" "CVS" "Makefile") nil nil "Customized with use-package ccls")
+ '(projectile-project-search-path '("~/Development/"))
  '(projectile-switch-project-action 'helm-projectile-find-file)
  '(safe-local-variable-values
    '((whitespace-line-column . 120) (whitespace-line-column . 100)))
@@ -127,7 +124,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :extend nil :stipple nil :background "#2e3436" :foreground "#eeeeec" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight regular :height 140 :width normal :foundry "UKWN" :family "Iosevka Term"))))
+ '(default ((t (:inherit nil :extend nil :stipple nil :background "#2e3436" :foreground "#eeeeec" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight regular :height 160 :width normal :foundry "UKWN" :family "Iosevka Term"))))
  '(company-tooltip ((t (:background "#292a2b" :inherit default))))
  '(company-tooltip-common ((t (:inherit font-lock-constant-face))))
  '(company-tooltip-scrollbar-thumb ((t (:background "#39c6414f43d2"))))

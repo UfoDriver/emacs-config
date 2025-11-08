@@ -31,12 +31,6 @@
 (use-package meson-mode
   :defer t)
 
-(use-package helm-posframe
-  :defer t
-  :if (display-graphic-p)
-  :init
-  (helm-posframe-enable))
-
 (use-package emacs
   :config
   (global-set-key (kbd "M-u") 'upcase-dwim)
@@ -83,6 +77,13 @@
   :bind-keymap ("C-c l" . lsp-command-map)
   :config
   (setq read-process-output-max 8192)
+  ;; https://github.com/emacs-lsp/lsp-mode/issues/4838#issuecomment-3198461412
+  ;; https://github.com/emacs-lsp/lsp-mode/issues/4838#issuecomment-3198461412
+  (advice-add 'lsp-typescript-javascript-tsx-jsx-activate-p :around
+              (lambda (orig-fn filename &rest args)
+                (message "Checking activation for: %s" filename) ; Debug message
+                (or (string-match-p "\\.vue\\'" filename)
+                    (apply orig-fn filename args))))
   :hook
   (lsp-mode . lsp-enable-which-key-integration))
 
@@ -100,7 +101,8 @@
   (setq-default inferior-lisp-program "/usr/bin/sbcl")
   :config
   (load (expand-file-name "~/.local/share/common-lisp/slime-helper.el"))
-  (slime-setup '(slime-company slime-repl inferior-slime slime-fancy slime-presentations
+  (slime-setup '(slime-company slime-repl inferior-slime slime-fancy
+                               slime-presentations
                                slime-presentation-streams helm-slime))
   (let ((hyperspec-dir (expand-file-name (concat user-emacs-directory "/HyperSpec/"))))
     (if (file-directory-p hyperspec-dir)
@@ -138,7 +140,14 @@
   :defer t)
 
 (use-package hy-mode
-  :mode ("\\.hy\\'" . hy-mode))
+  :mode ("\\.hy\\'" . hy-mode)
+  :after lsp-mode
+  :config
+  (setq hy-jedhy--enable? nil)
+  (lsp-register-client (make-lsp-client
+                        :new-connection (lsp-stdio-connection "hyuga")
+                        :activation-fn (lsp-activate-on "hy")
+                        :server-id 'hyuga)))
 
 (use-package projectile
   :defer t
@@ -158,6 +167,8 @@
   ("M-y" . helm-show-kill-ring)
   ("C-x C-b" . helm-mini)
   ("C-x C-f" . helm-find-files)
+  :config
+  (setf helm-display-function 'helm-display-buffer-in-own-frame)
   :init
   (helm-mode 1))
 
@@ -209,7 +220,7 @@
 
 (use-package web-mode
   :ensure t
-  :init
+  :config
   (setf (alist-get 'web-mode lsp--formatting-indent-alist) 'web-mode-code-indent-offset)
   :mode
   (("\\.vue\\'" . web-mode)))
@@ -248,31 +259,32 @@
 ;; TO SORT OUT
 ;; -----------------------------------------------------------------------------
 
-(use-package dap-mode
-  :config
-  (setq dap-python-debugger 'debugpy)
-  :init
-  (require 'dap-cpptools)
-  (dap-register-debug-template
-   "Rust::GDB Run Configuration"
-   (list :type "gdb"
-         :request "launch"
-         :name "GDB::Run"
-         :gdbpath "rust-gdb"
-         :target nil
-         :cwd nil))
-  (require 'dap-python)
-  )
+;; (use-package dap-mode
+;;   :defer t
+;;   :config
+;;   (setq dap-python-debugger 'debugpy)
+;;   :init
+;;   (require 'dap-cpptools)
+;;   (dap-register-debug-template
+;;    "Rust::GDB Run Configuration"
+;;    (list :type "gdb"
+;;          :request "launch"
+;;          :name "GDB::Run"
+;;          :gdbpath "rust-gdb"
+;;          :target nil
+;;          :cwd nil))
+;;   (require 'dap-python)
+;;   )
 
 ;; Next form is copypaste and should be cleaned
-(use-package ccls
-  :defer t
-  :after projectile
-;  :ensure-system-package ccls
-  ;; :custom
-  ;; (ccls-args nil)
-  ;; (ccls-executable (executable-find "/home/alex/tmp/ccls/Release/ccls"))
-  )
+;; (use-package ccls
+;;   :defer t
+;;   :after projectile
+;; ;  :ensure-system-package ccls
+;;   ;; :custom
+;;   ;; (ccls-args nil)
+;;   ;; (ccls-executable (executable-find "/home/alex/tmp/ccls/Release/ccls"))
+;;   )
 
 ;; -----------------------------------------------------------------------------
 ;; LOCAL INITIALIZATION
