@@ -78,10 +78,11 @@
                    fold-dwim geiser-guile helm-ag helm-lsp helm-make
                    helm-posframe helm-projectile helm-slime helpful hy-mode
                    jinja2-mode kubernetes lsp-ui magit meson-mode paredit
-                   pdf-tools poke poke-mode python-pytest restclient-helm
-                   restclient-jq rust-mode sass-mode slime-company spice-mode
-                   treemacs-all-the-icons treemacs-projectile treesit-auto
-                   typescript-mode use-package web-mode which-key))
+                   pdf-tools poke poke-mode posframe python-pytest
+                   restclient-helm restclient-jq rust-mode sass-mode
+                   slime-company spice-mode treemacs-all-the-icons
+                   treemacs-projectile treesit-auto typescript-mode web-mode
+                   which-key))
  '(pixel-scroll-precision-interpolate-page t)
  '(pixel-scroll-precision-mode t)
  '(projectile-completion-system 'helm)
