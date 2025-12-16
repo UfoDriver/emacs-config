@@ -76,13 +76,12 @@
                    diminish docker docker-compose-mode dockerfile-mode dotnet
                    drag-stuff elisp-format erlang feature-mode flycheck
                    fold-dwim geiser-guile helm-ag helm-lsp helm-make
-                   helm-posframe helm-projectile helm-slime helpful hy-mode
-                   jinja2-mode kubernetes lsp-ui magit meson-mode paredit
-                   pdf-tools poke poke-mode posframe python-pytest
-                   restclient-helm restclient-jq rust-mode sass-mode
-                   slime-company spice-mode treemacs-all-the-icons
-                   treemacs-projectile treesit-auto typescript-mode web-mode
-                   which-key))
+                   helm-projectile helm-slime helpful hy-mode jinja2-mode
+                   kubernetes lsp-ui magit meson-mode paredit pdf-tools poke
+                   poke-mode posframe python-pytest restclient-helm
+                   restclient-jq rust-mode sass-mode slime-company spice-mode
+                   treemacs-all-the-icons treemacs-projectile treesit-auto
+                   typescript-mode web-mode which-key))
  '(pixel-scroll-precision-interpolate-page t)
  '(pixel-scroll-precision-mode t)
  '(projectile-completion-system 'helm)

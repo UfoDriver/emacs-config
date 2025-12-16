@@ -25,6 +25,7 @@
   :config
   (diminish 'hs-minor-mode)
   (diminish 'global-whitespace-mode)
+  (diminish 'whitespace-mode)
   (diminish 'eldoc-mode)
   (diminish 'auto-revert-mode))
 
