@@ -72,15 +72,14 @@
      ("org" . "https://orgmode.org/elpa/")))
  '(package-enable-at-startup nil)
  '(package-selected-packages
-   '(ace-jump-mode bind-key ccls company-quickhelp company-restclient csharp-mode
-                   diff-hl diminish docker docker-compose-mode dockerfile-mode
-                   dotnet drag-stuff elisp-format ement erlang feature-mode
-                   flycheck fold-dwim geiser-guile helm-ag helm-lsp helm-make
+   '(ace-jump-mode bind-key ccls company-quickhelp company-restclient diff-hl
+                   diminish docker docker-compose-mode dockerfile-mode
+                   drag-stuff elisp-format erlang feature-mode flycheck
+                   fold-dwim geiser-guile helm-ag helm-lsp helm-make
                    helm-projectile helm-slime helpful hy-mode jinja2-mode
                    kubernetes lsp-docker lsp-treemacs lsp-ui magit meson-mode
-                   nerd-icons-dired paredit pdf-tools poke poke-mode
-                   python-pytest restclient-helm restclient-jq rust-mode
-                   sass-mode slime-company spice-mode treemacs-all-the-icons
+                   nerd-icons-dired paredit python-pytest restclient-helm
+                   restclient-jq rust-mode sass-mode slime-company
                    treemacs-nerd-icons treemacs-projectile treesit-auto
                    typescript-mode web-mode which-key))
  '(pixel-scroll-precision-interpolate-page t)
