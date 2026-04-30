@@ -72,15 +72,16 @@
      ("org" . "https://orgmode.org/elpa/")))
  '(package-enable-at-startup nil)
  '(package-selected-packages
-   '(all-the-icons ccls company-quickhelp company-restclient csharp-mode diff-hl
-                   diminish docker docker-compose-mode dockerfile-mode dotnet
-                   drag-stuff elisp-format erlang feature-mode flycheck
-                   fold-dwim geiser-guile helm-ag helm-lsp helm-make
+   '(ace-jump-mode bind-key ccls company-quickhelp company-restclient csharp-mode
+                   diff-hl diminish docker docker-compose-mode dockerfile-mode
+                   dotnet drag-stuff elisp-format ement erlang feature-mode
+                   flycheck fold-dwim geiser-guile helm-ag helm-lsp helm-make
                    helm-projectile helm-slime helpful hy-mode jinja2-mode
-                   kubernetes lsp-ui magit meson-mode paredit pdf-tools poke
-                   poke-mode posframe python-pytest restclient-helm
-                   restclient-jq rust-mode sass-mode slime-company spice-mode
-                   treemacs-all-the-icons treemacs-projectile treesit-auto
+                   kubernetes lsp-docker lsp-treemacs lsp-ui magit meson-mode
+                   nerd-icons-dired paredit pdf-tools poke poke-mode
+                   python-pytest restclient-helm restclient-jq rust-mode
+                   sass-mode slime-company spice-mode treemacs-all-the-icons
+                   treemacs-nerd-icons treemacs-projectile treesit-auto
                    typescript-mode web-mode which-key))
  '(pixel-scroll-precision-interpolate-page t)
  '(pixel-scroll-precision-mode t)
@@ -124,7 +125,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :extend nil :stipple nil :background "#2e3436" :foreground "#eeeeec" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight regular :height 160 :width normal :foundry "UKWN" :family "Iosevka Term"))))
+ '(default ((t (:inherit nil :extend nil :stipple nil :background "#2e3436" :foreground "#eeeeec" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight regular :height 158 :width normal :family "IosevkaTerm Nerd Font Mono"))))
  '(company-tooltip ((t (:background "#292a2b" :inherit default))))
  '(company-tooltip-common ((t (:inherit font-lock-constant-face))))
  '(company-tooltip-scrollbar-thumb ((t (:background "#39c6414f43d2"))))

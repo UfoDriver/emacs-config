@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;;; package --- Emacs init file
 ;;; Commentary:
 ;;; Everyone should have his/her own init.el
@@ -116,6 +117,11 @@
   (drag-stuff-define-keys)
   (setf drag-stuff-except-modes '(org-mode)))
 
+(use-package ace-jump-mode
+  :diminish nil
+  :bind
+  ("C-c SPC" . ace-jump-mode))
+
 (use-package magit
   :defer t
   :init
@@ -228,8 +234,25 @@
 
 (use-package treemacs
   :defer t
+  ;; :config
+  ;; (treemacs-resize-icons 16)
+  )
+
+(use-package nerd-icons
+  ;; :custom
+  ;; The Nerd Font you want to use in GUI
+  ;; "Symbols Nerd Font Mono" is the default and is recommended
+  ;; but you can use any other Nerd Font if you want
+  ;; (nerd-icons-font-family "Symbols Nerd Font Mono")
+  )
+
+(use-package treemacs-nerd-icons
   :config
-  (treemacs-resize-icons 16))
+  (treemacs-nerd-icons-config))
+
+(use-package nerd-icons-dired
+  :hook
+  (dired-mode . nerd-icons-dired-mode))
 
 (use-package diff-hl
   :hook
