@@ -17,7 +17,7 @@
  '(company-tooltip-idle-delay 0.5)
  '(css-indent-offset 2)
  '(custom-enabled-themes '(tango-dark))
- `(custom-file ,(expand-file-name "custom.el" user-emacs-directory))
+ '(custom-file "~/.config/emacs/custom.el")
  '(custom-safe-themes
    '("3448e3f5d01b39ce75962328a5310438e4a19e76e4b691c21c8e04ca318a5f62" default))
  '(delete-selection-mode t)
@@ -53,6 +53,7 @@
  '(menu-bar-mode nil)
  '(mouse-wheel-progressive-speed nil)
  '(mouse-wheel-scroll-amount '(1 ((control)) ((shift) . 5)))
+ '(nerd-icons-font-family "IosevkaTerm Nerd Font Mono")
  '(org-support-shift-select 'always)
  '(org-todo-keywords '((sequence "TODO" "IN-PROGRESS" "BLOCKED" "DONE")))
  '(package-archives
