@@ -14,48 +14,38 @@
  '(company-format-margin-function 'company-detect-icons-margin)
  '(company-minimum-prefix-length 1)
  '(company-tooltip-align-annotations t)
- '(company-tooltip-idle-delay 0)
+ '(company-tooltip-idle-delay 0.5)
  '(css-indent-offset 2)
  '(custom-enabled-themes '(tango-dark))
  `(custom-file ,(expand-file-name "custom.el" user-emacs-directory))
  '(custom-safe-themes
    '("3448e3f5d01b39ce75962328a5310438e4a19e76e4b691c21c8e04ca318a5f62" default))
- '(dap-auto-configure-mode t)
  '(delete-selection-mode t)
- '(ecb-options-version "2.40")
  '(electric-pair-mode t)
  '(fill-column 80)
  '(flycheck-gcc-language-standard "c++11")
- '(gc-cons-threshold 1000000)
+ '(gc-cons-threshold 16000000)
  '(gdb-many-windows t)
  '(geiser-active-implementations '(guile) t)
  '(geiser-default-implementation 'guile)
- '(geiser-guile-binary "/usr/bin/guile3.0")
+ '(geiser-guile-binary (executable-find "guile3.0"))
  '(global-company-mode t)
  '(global-whitespace-mode t)
  '(helm-display-buffer-height 40)
  '(helm-display-buffer-width 120)
- '(helm-gtags-auto-update t)
- '(helm-gtags-ignore-case t)
- '(helm-gtags-prefix-key "\3-cg")
- '(helm-gtags-pulse-at-cursor t)
- '(helm-gtags-suggested-key-mapping t)
- '(helm-gtags-use-input-at-cursor t)
  '(helm-visible-mark-prefix "")
  '(hs-set-up-overlay 'my:display-fold-marker)
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
- '(jedi:complete-on-dot t)
  '(js-indent-level 2)
  '(js-switch-indent-offset 2)
- '(js2-basic-offset 2)
  '(lsp-clients-typescript-plugins
    [(:name "@vue/typescript-plugin" :location
            "/home/alex/.config/emacs/.cache/lsp/npm/@vue/language-server"
            :languages ["vue"])])
  '(lsp-enable-on-type-formatting nil)
  '(lsp-enable-snippet nil)
- '(lsp-pylsp-server-command '("pylsp" "-v"))
+ '(lsp-pylsp-server-command '("pylsp"))
  '(lsp-volar-as-add-on t)
  '(magit-push-always-verify nil)
  '(markdown-command "markdown2 -x tables -x smarty-pants -x strike")
@@ -66,24 +56,19 @@
  '(org-support-shift-select 'always)
  '(org-todo-keywords '((sequence "TODO" "IN-PROGRESS" "BLOCKED" "DONE")))
  '(package-archives
-   '(("melpa" . "http://melpa.org/packages/")
-     ("original" . "http://tromey.com/elpa/")
-     ("gnu" . "https://elpa.gnu.org/packages/")
-     ("org" . "https://orgmode.org/elpa/")))
- '(package-enable-at-startup nil)
+   '(("melpa" . "https://melpa.org/packages/")
+     ("gnu" . "https://elpa.gnu.org/packages/")))
  '(package-selected-packages
    '(ace-jump-mode bind-key ccls company-quickhelp company-restclient diff-hl
                    diminish docker docker-compose-mode dockerfile-mode
                    drag-stuff elisp-format erlang feature-mode flycheck
                    fold-dwim geiser-guile helm-ag helm-lsp helm-make
                    helm-projectile helm-slime helpful hy-mode jinja2-mode
-                   kubernetes lsp-docker lsp-treemacs lsp-ui magit meson-mode
-                   nerd-icons-dired paredit python-pytest restclient-helm
-                   restclient-jq rust-mode sass-mode slime-company
-                   treemacs-nerd-icons treemacs-projectile treesit-auto
+                   lsp-docker lsp-treemacs lsp-ui magit meson-mode
+                   nerd-icons-dired paredit python-pytest restclient
+                   restclient-helm restclient-jq rust-mode sass-mode slime
+                   slime-company treemacs-nerd-icons treemacs-projectile
                    typescript-mode web-mode which-key))
- '(pixel-scroll-precision-interpolate-page t)
- '(pixel-scroll-precision-mode t)
  '(projectile-completion-system 'helm)
  '(projectile-globally-ignored-directories
    '(".idea" ".ensime_cache" ".eunit" ".git" ".hg" ".fslckout" "_FOSSIL_" ".bzr"
@@ -93,7 +78,7 @@
  '(projectile-switch-project-action 'helm-projectile-find-file)
  '(safe-local-variable-values
    '((whitespace-line-column . 120) (whitespace-line-column . 100)))
- '(scheme-program-name "guile2.2")
+ '(scheme-program-name "guile3.0")
  '(scroll-bar-mode nil)
  '(scroll-step 1)
  '(show-paren-mode t)
@@ -105,7 +90,6 @@
  '(uniquify-buffer-name-style 'post-forward nil (uniquify))
  '(uniquify-separator ":")
  '(use-package-always-ensure t)
- '(use-package-verbose t)
  '(warning-suppress-log-types '((comp)))
  '(web-mode-code-indent-offset 2)
  '(web-mode-css-indent-offset 2)
@@ -114,10 +98,10 @@
  '(web-mode-markup-indent-offset 2)
  '(web-mode-script-padding 2)
  '(web-mode-style-padding 2)
- '(whitespace-display-mappings '((space-mark 32) (newline-mark 13) (tab-mark 9)))
+ '(whitespace-display-mappings '((space-mark 32 []) (newline-mark 13 []) (tab-mark 9 [])))
  '(whitespace-line-column 100)
  '(whitespace-style
-   '(face trailing tabs spaces lines-tail newline empty indentation space-after-tab
+   '(face trailing tabs lines-tail newline empty indentation space-after-tab
           space-before-tab space-mark tab-mark newline-mark)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -135,7 +119,7 @@
  '(font-lock-keyword-face ((t (:foreground "#b4fa70" :weight bold))))
  '(magit-diff-add ((t (:inherit nil :foreground "green"))))
  '(magit-diff-del ((t (:inherit diff-removed :foreground "red"))))
- '(magit-item-highlight ((t (:inherit highlight-))))
+ '(magit-item-highlight ((t (:inherit highlight))))
  '(mode-line ((t (:background "#555753" :foreground "#eeeeec" :box nil))))
  '(mode-line-inactive ((t (:background "#2e3436" :foreground "#eeeeec" :box nil))))
  '(whitespace-empty ((t (:background "DarkGoldenrod4" :foreground "firebrick"))))

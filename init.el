@@ -1,12 +1,8 @@
-;; -*- lexical-binding: t; -*-
-;;; package --- Emacs init file
+;;; package --- Emacs init file -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Everyone should have his/her own init.el
 ;;; Code:
 (load (expand-file-name "custom.el" user-emacs-directory))
-;;(require 'compat)
-(require 'package)
-(package-initialize)
 
 ;; -----------------------------------------------------------------------------
 ;; GLOBAL SETTINGS
@@ -24,8 +20,6 @@
 (use-package diminish
   :ensure t
   :config
-  (diminish 'hs-minor-mode)
-  (diminish 'global-whitespace-mode)
   (diminish 'whitespace-mode)
   (diminish 'eldoc-mode)
   (diminish 'auto-revert-mode))
@@ -37,22 +31,14 @@
   :config
   (global-set-key (kbd "M-u") 'upcase-dwim)
   (global-set-key (kbd "M-l") 'downcase-dwim)
-
-  (when (display-graphic-p)
-    (require 'pixel-scroll)
-    (pixel-scroll-precision-mode t)
-    (bind-keys :package pixel-scroll-precision-mode
-               ([remap scroll-up-command]   . #'pixel-scroll-interpolate-down)
-               ([remap scroll-down-command] . #'pixel-scroll-interpolate-up)))
-
   ; https://karthinks.com/software/batteries-included-with-emacs/
-  (defun pulse-line (&rest _)
+  (defun my:pulse-line (&rest _)
     "Pulse the current line."
     (pulse-momentary-highlight-one-line (point)))
   (dolist (command '(scroll-up-command scroll-down-command recenter-top-bottom other-window))
-    (advice-add command :after #'pulse-line))
+    (advice-add command :after #'my:pulse-line))
 
-  (define-advice kill-ring-save (:before (start end &rest rest))
+  (define-advice kill-ring-save (:before (start end &rest _))
     (pulse-momentary-highlight-region start end))
   (global-display-line-numbers-mode)
   (add-to-list 'auto-mode-alist '("\\.tsx\\'" . typescript-mode)))
@@ -69,25 +55,24 @@
 (defvar major-modes-without-lsp '(lisp-mode emacs-lisp-mode scheme-mode))
 (defun my:lsp-hook ()
   "Check if we want to start LSP for this mode."
-  (if (member major-mode major-modes-without-lsp)
+  (if (memq major-mode major-modes-without-lsp)
       (message "LSP is disabled for %s, check `major-modes-without-lsp` variable" major-mode)
-    (lsp)))
+    (lsp-deferred)))
 
 (use-package lsp-mode
   :defer t
-  :hook (prog-mode . my:lsp-hook)
+  :hook
+  (prog-mode . my:lsp-hook)
+  (lsp-mode . lsp-enable-which-key-integration)
   :bind-keymap ("C-c l" . lsp-command-map)
   :config
-  (setq read-process-output-max 8192)
-  ;; https://github.com/emacs-lsp/lsp-mode/issues/4838#issuecomment-3198461412
+  (setq read-process-output-max 1048576)
   ;; https://github.com/emacs-lsp/lsp-mode/issues/4838#issuecomment-3198461412
   (advice-add 'lsp-typescript-javascript-tsx-jsx-activate-p :around
               (lambda (orig-fn filename &rest args)
-                (message "Checking activation for: %s" filename) ; Debug message
+                (message "Checking activation for: %s" filename)
                 (or (string-match-p "\\.vue\\'" filename)
-                    (apply orig-fn filename args))))
-  :hook
-  (lsp-mode . lsp-enable-which-key-integration))
+                    (apply orig-fn filename args)))))
 
 (use-package lsp-ui
   :defer t)
@@ -100,12 +85,18 @@
   (or (executable-find "sbcl") (executable-find "ecl") (executable-find "clisp"))
   :defer t
   :init
-  (setq-default inferior-lisp-program "/usr/bin/sbcl")
+  (setq-default inferior-lisp-program (or (executable-find "sbcl")
+                                          (executable-find "ecl")
+                                          (executable-find "clisp")))
   :config
-  (load (expand-file-name "~/.local/share/common-lisp/slime-helper.el"))
-  (slime-setup '(slime-company slime-repl inferior-slime slime-fancy
-                               slime-presentations
-                               slime-presentation-streams helm-slime))
+  (let ((helper-filename (expand-file-name "~/.local/share/common-lisp/slime-helper.el")))
+    (if (file-exists-p helper-filename)
+        (progn
+          (load helper-filename)
+          (slime-setup '(slime-company slime-repl inferior-slime slime-fancy
+                                       slime-presentations
+                                       slime-presentation-streams helm-slime)))
+      (message "No ~/.local/share/common-lisp/slime-helper.el found")))
   (let ((hyperspec-dir (expand-file-name (concat user-emacs-directory "/HyperSpec/"))))
     (if (file-directory-p hyperspec-dir)
         (setq-default common-lisp-hyperspec-root hyperspec-dir))))
@@ -114,8 +105,9 @@
   :diminish nil
   :config
   (drag-stuff-global-mode t)
-  (drag-stuff-define-keys)
-  (setf drag-stuff-except-modes '(org-mode)))
+  (setf drag-stuff-except-modes '(org-mode))
+  :bind (("M-<up>" . drag-stuff-up)
+         ("M-<down>" . drag-stuff-down)))
 
 (use-package ace-jump-mode
   :diminish nil
@@ -123,20 +115,15 @@
   ("C-c SPC" . ace-jump-mode))
 
 (use-package magit
-  :defer t
-  :init
-  (setq-default magit-last-seen-setup-instructions "1.4.0"))
+  :defer t)
 
 (use-package company
   :diminish nil
-  :config
-  (global-company-mode)
+  ;; :config
   ;;(company-quickhelp-mode)
   )
-  ;; (setq company-format-margin-function #'company-detect-icons-margin))
 
 (use-package flycheck
-  :defer t
   :init
   (global-flycheck-mode))
 
@@ -161,13 +148,12 @@
   :bind-keymap
   ("C-c p" . projectile-command-map)
   :bind
-  (:map projectile-command-map)
-  ("s s" . helm-projectile-ag)
-  :config
-  (my:setup-frame-name))
+  (:map projectile-command-map
+        ("s s" . helm-projectile-ag))
+  :init
+  (add-hook 'projectile-after-switch-project-hook #'my:setup-frame-name))
 
 (use-package helm
-  :defer t
   :diminish nil
   :bind
   ("M-x" . helm-M-x)
@@ -195,11 +181,8 @@
   ;; :bind-keymap ("C-c" . geiser-map)
   )
 
-(use-package all-the-icons
-  :if (display-graphic-p))
-
-(use-package paredit
-  :defer t)
+;; (use-package paredit
+;;   :defer t)
 
 (use-package fold-dwim
   :defer t
@@ -207,7 +190,6 @@
   ("C-c <tab>" . fold-dwim-toggle))
 
 (use-package helpful
-  :defer nil
   :bind
   ([remap describe-function] . helpful-callable)
   ([remap describe-variable] . helpful-variable)
@@ -215,8 +197,7 @@
   ([remap describe-command]  . helpful-command))
 
 (use-package restclient
-  :defer t
-  :requires restclient-jq)
+  :defer t)
 
 (use-package windmove
   :bind
@@ -226,9 +207,10 @@
   ("C-c <left>"  . #'windmove-left))
 
 (use-package web-mode
-  :ensure t
   :config
+  ;; Next line iers fragile because it uses private variable that can be changed without notice
   (setf (alist-get 'web-mode lsp--formatting-indent-alist) 'web-mode-code-indent-offset)
+  :after lsp-mode
   :mode
   (("\\.vue\\'" . web-mode)))
 
@@ -247,6 +229,7 @@
   )
 
 (use-package treemacs-nerd-icons
+  :after treemacs
   :config
   (treemacs-nerd-icons-config))
 
@@ -272,9 +255,9 @@
 ;; -----------------------------------------------------------------------------
 
 ;; Enter for newline-and-indent in programming modes
-(add-hook 'prog-mode-hook #'(lambda ()
+(add-hook 'prog-mode-hook (lambda ()
   (local-set-key (kbd "RET") 'newline-and-indent)
-  ;; (hs-minor-mode t)
+  (hs-minor-mode t)
   ))
 
 (keymap-global-set "M-o" 'my:other-window-mru)
@@ -314,21 +297,18 @@
 ;; LOCAL INITIALIZATION
 ;; -----------------------------------------------------------------------------
 
-;; (load-file (expand-file-name "icons-in-terminal.el" user-emacs-directory))
-;; (load-file (expand-file-name "icons-in-terminal-local.el" user-emacs-directory))
+(if (file-exists-p (expand-file-name "init-local.el" user-emacs-directory))
+    (load-file (expand-file-name "init-local.el" user-emacs-directory))
+  (message "No init-local.el found"))
 
-(if (file-exists-p (expand-file-name "local-init.el" user-emacs-directory))
-    (load-file (expand-file-name "local-init.el" user-emacs-directory))
-  (message "No local-init.el found"))
+;; (require 'color)
 
-(require 'color)
-
-(let ((bg (face-attribute 'default :background)))
-  (custom-set-faces
-   `(company-tooltip ((t (:inherit default :background ,(color-lighten-name bg 2)))))
-   `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 10)))))
-   `(company-scrollbar-fg ((t (:background ,(color-lighten-name bg 5)))))
-   `(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
-   `(company-tooltip-common ((t (:inherit font-lock-constant-face))))))
+;; (let ((bg (face-attribute 'default :background)))
+;;   (custom-set-faces
+;;    `(company-tooltip ((t (:inherit default :background ,(color-lighten-name bg 2)))))
+;;    `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 10)))))
+;;    `(company-scrollbar-fg ((t (:background ,(color-lighten-name bg 5)))))
+;;    `(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
+;;    `(company-tooltip-common ((t (:inherit font-lock-constant-face))))))
 
 ;;; init.el ends here

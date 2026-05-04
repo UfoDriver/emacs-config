@@ -1,29 +1,19 @@
-;;; package: --- Collection of local useful functions
+;;; package: --- Collection of local useful functions -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Just an assorted useful stuff
 ;;; Code:
 
 (require 'cl-lib)
 
-(defun my:set-window-width (x)
-  "Set current window width to X chars."
-  (adjust-window-trailing-edge (selected-window)
-                               (- x (window-width))
-                               t))
-
-(defun my:set-80-columns ()
-  "Set current window to 80 columns width."
-  (interactive)
-  (my:set-window-width 81))
-
 (defun my:setup-frame-name ()
   "Set up frame name with projectile support."
-  (when (fboundp 'projectile-project-name)
-    (set-frame-name
-     (if (string= (projectile-project-name) "-")
-         (progn (message "Projectile project not found")
-                default-directory)
-       (capitalize (projectile-project-name))))))
+  (set-frame-name
+   (let ((project-name (projectile-project-name)))
+     (if (string= project-name "-")
+         (progn
+           (message "Projectile project not found")
+           default-directory)
+       (capitalize project-name)))))
 
 (defun my:notes (prefix)
   "Open index org file.  With PREFIX open attic."
@@ -49,9 +39,8 @@
                   (let ((chunks (split-string line "[][: ]" t)))
                     (cons (cadr chunks) (caddr chunks))))
                 (split-string pytest-output "\n"))))
-  (dolist (pair (delete-dups pairs))
-    (my:mark-test-with-tag (car pair) (cdr pair))))
-)
+    (dolist (pair (delete-dups pairs))
+      (my:mark-test-with-tag (car pair) (cdr pair)))))
 
 (defun my:display-fold-marker (ov)
   "Format text replacement for folding marker for overlay OV."
@@ -68,8 +57,7 @@
   "Select the most recently used window on this frame."
   (interactive)
   (when-let ((mru-window
-              (get-mru-window
-               nil nil 'not-this-one-dummy)))
+              (get-mru-window nil nil t)))
     (select-window mru-window)))
 
 ;;; custom-functions.el ends here
